@@ -1,7 +1,7 @@
 # Личный проект «YetiCave»
 
 * Студент: [Oleksii Mykhailenko](https://up.htmlacademy.ru/php/11/user/816449).
-* Наставник: `Неизвестно`.
+* Наставник: 'Дмитрий Алейников'.
 
 ---
 
