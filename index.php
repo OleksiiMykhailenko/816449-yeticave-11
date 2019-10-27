@@ -60,7 +60,7 @@ $user_name = 'Oleksii Mykhailenko'; // укажите здесь ваше имя
                 $num = count($categories);
                 while ($index < $num): ?>
                     <li class="promo__item promo__item--boards">
-                        <a class="promo__link" href="pages/all-lots.html"><?= $categories[$index]; ?></a>
+                        <a class="promo__link" href="pages/all-lots.html"><? echo $categories[$index]; ?></a>
                     </li>
                     <?php $index++; ?>
                 <?php endwhile; ?>
@@ -73,58 +73,58 @@ $user_name = 'Oleksii Mykhailenko'; // укажите здесь ваше имя
             <ul class="lots__list">
                 <!--заполните этот список из массива с товарами-->
                 <?php
-                $ads = [
+                $goods = [
                     [
-                        'Название' => '2014 Rossignol District Snowboard',
-                        'Категория' => 'Доски и лыжи',
-                        'Цена' => '10999',
-                        'URL картинки' => 'img/lot-1.jpg'
+                        'title' => '2014 Rossignol District Snowboard',
+                        'category' => 'Доски и лыжи',
+                        'price' => '10999',
+                        'url_picture' => 'img/lot-1.jpg'
                     ],
                     [
-                        'Название' => 'DC Ply Mens 2016/2017 Snowboard',
-                        'Категория' => 'Доски и лыжи',
-                        'Цена' => '159999',
-                        'URL картинки' => 'img/lot-2.jpg'
+                        'title' => 'DC Ply Mens 2016/2017 Snowboard',
+                        'category' => 'Доски и лыжи',
+                        'price' => '159999',
+                        'url_picture' => 'img/lot-2.jpg'
                     ],
                     [
-                        'Название' => 'Крепления Union Contact Pro 2015 года размер L/XL',
-                        'Категория' => 'Крепления',
-                        'Цена' => '8000',
-                        'URL картинки' => 'img/lot-3.jpg'
+                        'title' => 'Крепления Union Contact Pro 2015 года размер L/XL',
+                        'category' => 'Крепления',
+                        'price' => '8000',
+                        'url_picture' => 'img/lot-3.jpg'
                     ],
                     [
-                        'Название' => 'Ботинки для сноуборда DC Mutiny Charocal',
-                        'Категория' => 'Ботинки',
-                        'Цена' => '10999',
-                        'URL картинки' => 'img/lot-4.jpg'
+                        'title' => 'Ботинки для сноуборда DC Mutiny Charocal',
+                        'category' => 'Ботинки',
+                        'price' => '10999',
+                        'url_picture' => 'img/lot-4.jpg'
                     ],
                     [
-                        'Название' => 'Куртка для сноуборда DC Mutiny Charocal',
-                        'Категория' => 'Одежда',
-                        'Цена' => '7500',
-                        'URL картинки' => 'img/lot-5.jpg'
+                        'title' => 'Куртка для сноуборда DC Mutiny Charocal',
+                        'category' => 'Одежда',
+                        'price' => '7500',
+                        'url_picture' => 'img/lot-5.jpg'
                     ],
                     [
-                        'Название' => 'Маска Oakley Canopy',
-                        'Категория' => 'Разное',
-                        'Цена' => '5400',
-                        'URL картинки' => 'img/lot-6.jpg'
+                        'title' => 'Маска Oakley Canopy',
+                        'category' => 'Разное',
+                        'price' => '5400',
+                        'url_picture' => 'img/lot-6.jpg'
                     ]
                 ];
                 ?>
-                <?php foreach ($ads as $key => $val): ?>
+                <?php foreach ($goods as $key => $val): ?>
                     <li class="lots__item lot">
                         <div class="lot__image">
-                            <img src="<?= $val['URL картинки']; ?>" width="350" height="260" alt="">
+                            <img src="<? echo $val['url_picture']; ?>" width="350" height="260" alt="">
                         </div>
                         <div class="lot__info">
-                            <span class="lot__category"><?= $val['Категория']; ?></span>
+                            <span class="lot__category"><? echo $val['category']; ?></span>
                             <h3 class="lot__title"><a class="text-link"
-                                                      href="pages/lot.html"><?= $val['Название']; ?></a></h3>
+                                                      href="pages/lot.html"><? echo $val['title']; ?></a></h3>
                             <div class="lot__state">
                                 <div class="lot__rate">
                                     <span class="lot__amount">Стартовая цена</span>
-                                    <span class="lot__cost"><?= $val['Цена']; ?><b class="rub">р</b></span>
+                                    <span class="lot__cost"><? echo $val['price']; ?><b class="rub">р</b></span>
                                 </div>
                                 <div class="lot__timer timer">
                                     12:23
@@ -148,7 +148,7 @@ $user_name = 'Oleksii Mykhailenko'; // укажите здесь ваше имя
             $num = count($categories);
             while ($index < $num): ?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?= $categories[$index]; ?></a>
+                    <a href="pages/all-lots.html"><? echo $categories[$index]; ?></a>
                 </li>
                 <?php $index++; ?>
             <?php endwhile; ?>
