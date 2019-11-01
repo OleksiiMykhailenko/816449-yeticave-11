@@ -17,7 +17,7 @@
     </div>
     <ul class="lots__list">
         <?php foreach ($goods as $good): ?>
-            <?php echo include_template('_goods.php', ['good' => $good, 'time_report' => down_counter($good['expiration_date'])]) ?>
+            <?php echo include_template('_goods.php', ['good' => $good, 'time_report' => get_dt_range($good['expiration_date'])]) ?>
         <?php endforeach; ?>
     </ul>
 </section>

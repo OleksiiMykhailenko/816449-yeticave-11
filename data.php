@@ -11,7 +11,7 @@ $goods = [
         'category' => 'Доски и лыжи',
         'price' => '10999',
         'url_image' => 'img/lot-1.jpg',
-        'expiration_date' => '2019-10-31'
+        'expiration_date' => '2019-11-02'
     ],
     [
         'title' => 'DC Ply Mens 2016/2017 Snowboard',

@@ -12,11 +12,9 @@
                 <span
                     class="lot__cost"><?php echo formatting_sum(htmlspecialchars($good['price'])); ?></span>
             </div>
-            <?php if ($time_report) : ?>
-                <div class="lot__timer timer <?php echo $hour === 0 ? 'timer--finishing' : '' ?>">
+                <div class="lot__timer timer <?php echo $time_report['$hours'] === '00' ? 'timer--finishing' : '' ?>">
                     <?php echo implode(':', $time_report) ?>
                 </div>
-            <?php endif ?>
         </div>
     </div>
 </li>
