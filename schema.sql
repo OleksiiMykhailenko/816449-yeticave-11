@@ -3,25 +3,40 @@ CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 USE YetiCave;
 
-CREATE TABLE `YetiCave`.`category` ( `character_coder` VARCHAR(45) NOT NULL PRIMARY KEY,
-                                     `category_title` VARCHAR(45) NOT NULL);
+CREATE TABLE `category` ( `id` INT AUTO_INCREMENT PRIMARY KEY,
+                                     `character_code` VARCHAR(45) NOT NULL UNIQUE,
+                                     `title` VARCHAR(45) NOT NULL
+                                     );
 
-CREATE TABLE `YetiCave`.`lot` ( `lot_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                `date_create` TIMESTAMP NOT NULL,
-                                `lot_title` VARCHAR(128) NOT NULL,
-                                `lot_description` VARCHAR(255) NOT NULL,
-                                `lot_image` VARCHAR(255) NOT NULL,
-                                `starting_price` INT(11) NOT NULL,
-                                `date_of_completion` TIMESTAMP NOT NULL,
-                                `bid_step` INT(11) NOT NULL);
+CREATE TABLE `lots` ( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                 `date_create` TIMESTAMP NOT NULL,
+                                 `title` VARCHAR(128) NOT NULL,
+                                 `description` VARCHAR(255) NOT NULL,
+                                 `image` VARCHAR(255) NOT NULL,
+                                 `starting_price` INT(11) NOT NULL,
+                                 `date_of_completion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+                                 `bid_step` INT(11) NOT NULL,
+                                 `user_id` INT(11) NOT NULL,
+                                 `winner_id` INT(11) NOT NULL,
+                                 `category_id` INT(11) NOT NULL,
+                                 FOREIGN KEY (user_id) REFERENCES users (id),
+                                 FOREIGN KEY (winner_id) REFERENCES users (id),
+                                 FOREIGN KEY (category_id) REFERENCES category (id)
+                                 );
 
-CREATE TABLE `YetiCave`.`rate` ( `rate_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                 `rate_starting` TIMESTAMP NOT NULL,
-                                 `rate_price` INT(11) NOT NULL);
+CREATE TABLE `rates` ( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                  `date_starting_rate` TIMESTAMP NOT NULL,
+                                  `price` INT(11) NOT NULL,
+                                  `user_id` INT(11) NOT NULL,
+                                  `lot_id` INT(11) NOT NULL,
+                                  FOREIGN KEY (user_id) REFERENCES users (id),
+                                  FOREIGN KEY (lot_id) REFERENCES lots (id)
+                                  );
 
-CREATE TABLE `YetiCave`.`user` ( `user_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE `users` ( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                  `date_of_registration` TIMESTAMP NOT NULL,
-                                 `user_email` VARCHAR(45) NOT NULL,
-                                 `user_name` VARCHAR(45) NOT NULL,
-                                 `user_password` VARCHAR(45) NOT NULL,
-                                 `user_contacts` VARCHAR(128) NOT NULL);
+                                 `name` VARCHAR(45) NOT NULL,
+                                 `password` VARCHAR(45) NOT NULL,
+                                 `email` VARCHAR(45) NOT NULL UNIQUE,
+                                 `contacts` VARCHAR(128) NOT NULL
+                                 );
