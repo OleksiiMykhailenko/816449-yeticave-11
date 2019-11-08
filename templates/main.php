@@ -6,7 +6,7 @@
         <?php
         foreach ($categories as $category): ?>
             <li class="promo__item promo__item--boards">
-                <a class="promo__link" href="pages/all-lots.html"><?php echo htmlspecialchars($category); ?></a>
+                <a class="promo__link" href="pages/all-lots.html"><?php echo htmlspecialchars($category['title']); ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -17,7 +17,7 @@
     </div>
     <ul class="lots__list">
         <?php foreach ($goods as $good): ?>
-            <?php echo include_template('_goods.php', ['good' => $good, 'time_report' => get_dt_range($good['expiration_date'])]) ?>
+            <?php echo include_template('_goods.php', ['good' => $good, 'time_report' => get_dt_range($good['date_of_completion'])]) ?>
         <?php endforeach; ?>
     </ul>
 </section>

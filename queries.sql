@@ -118,7 +118,7 @@ WHERE lots.date_create < CURDATE() ORDER BY lots.date_create DESC;
 SELECT lots.title, category.title FROM lots JOIN category ON lots.category_id = category.id WHERE lots.id = 2;
 
 -- обновить название лота по его идентификатору
-UPDATE lots SET title = 'Маска Canopy Oakley' WHERE id = '6';
+UPDATE lots SET title = 'Маска Canopy Oakley' WHERE id = 6;
 
 -- получить список ставок для лота по его идентификатору с сортировкой по дате
 SELECT * FROM rates WHERE lot_id = '6' ORDER BY date_starting_rate ASC;
