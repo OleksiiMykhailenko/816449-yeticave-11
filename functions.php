@@ -25,3 +25,12 @@ function get_dt_range($future_date)
         'minutes' => $minutes
     );
 }
+
+function db_fetch_data($sql, $link)
+{
+    $result = mysqli_query($link, $sql);
+    if ($result) {
+        $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+    return $result;
+}
