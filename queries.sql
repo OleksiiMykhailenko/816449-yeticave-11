@@ -110,9 +110,9 @@ INSERT INTO rates SET date_starting_rate = '2019-10-15 00:30:00',
 SELECT * FROM category;
 
 -- получить самые новые, открытые лоты. Каждый лот должен включать название, стартовую цену, ссылку на изображение, цену, название категории
-SELECT lots.title, lots.starting_price, lots.image, category.title
+SELECT lots.title, lots.starting_price, lots.image, lots.date_of_completion, category.title as category
 FROM lots JOIN category ON lots.category_id = category.id
-WHERE lots.date_create < CURDATE() ORDER BY lots.date_create DESC;
+WHERE lots.date_of_completion > CURDATE() ORDER BY lots.date_create DESC;
 
 -- показать лот по его id. Получите также название категории, к которой принадлежит лот
 SELECT lots.title, category.title FROM lots JOIN category ON lots.category_id = category.id WHERE lots.id = 2;
