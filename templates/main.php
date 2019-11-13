@@ -6,7 +6,8 @@
         <?php
         foreach ($categories as $category): ?>
             <li class="promo__item promo__item--<?php echo htmlspecialchars($category['character_code']); ?>">
-                <a class="promo__link" href="pages/all-lots.html"><?php echo htmlspecialchars($category['title']); ?></a>
+                <a class="promo__link"
+                   href="pages/all-lots.html"><?php echo htmlspecialchars($category['title']); ?></a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -16,8 +17,8 @@
         <h2>Открытые лоты</h2>
     </div>
     <ul class="lots__list">
-        <?php foreach ($goods as $good): ?>
-            <?php echo include_template('_goods.php', ['good' => $good, 'time_report' => get_dt_range($good['date_of_completion'])]) ?>
+        <?php foreach ($lots as $lot): ?>
+            <?php echo include_template('_lots.php', ['lot' => $lot, 'time_report' => get_dt_range($lot['date_of_completion'])]) ?>
         <?php endforeach; ?>
     </ul>
 </section>

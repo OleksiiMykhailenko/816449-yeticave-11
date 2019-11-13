@@ -34,3 +34,20 @@ function db_fetch_data($sql, $link)
     }
     return $result;
 }
+
+function get_lot_by_id($lotId)
+{
+    global $sqlLot;
+    global $link;
+    $sqlLot = sprintf($sqlLot, $lotId);
+    $result = mysqli_query($link, $sqlLot);
+    if ($result) {
+        if (mysqli_num_rows($result)) {
+            return mysqli_fetch_all($result, MYSQLI_ASSOC)[0];
+        } else {
+            return null;
+        }
+    }
+    return null;
+}
+
