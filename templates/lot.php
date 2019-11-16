@@ -3,7 +3,7 @@
     <div class="lot-item__content">
         <div class="lot-item__left">
             <div class="lot-item__image">
-                <img src="<?php echo htmlspecialchars($lot['image']); ?>" width="730" height="548"
+                <img src="/uploads/<?php echo htmlspecialchars($lot['image']); ?>" width="730" height="548"
                      alt="<?php echo htmlspecialchars($lot['title']) ?>">
             </div>
             <p class="lot-item__category">Категория: <span><?php echo htmlspecialchars($lot['category']); ?></span></p>
