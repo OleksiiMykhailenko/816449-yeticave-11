@@ -40,15 +40,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $lot = filter_input_array(INPUT_POST, ['lot-name' => FILTER_DEFAULT, 'message' => FILTER_DEFAULT,
         'category-id' => FILTER_DEFAULT, 'lot-date' => FILTER_DEFAULT, 'lot-rate' => FILTER_DEFAULT, 'lot-step' => FILTER_DEFAULT], true);
 
-    foreach ($lot as $key => $value) {
-        if (isset($rules[$key])) {
-            $rule = $rules[$key];
-            $errors[$key] = $rule($value);
-        }
-        if (in_array($key, $required) && empty($value)) {
-            $errors[$key] = "Поле $key надо заполнить";
-        }
-    }
+    $fields = [
+        'lot-name' => 'Наименование',
+        'message' => 'Описание',
+        'category-id' => 'Категория',
+        'lot-date' => 'Дата окончания торгов ',
+        'lot-rate' => 'Начальная цена',
+        'lot-step' => 'Шаг ставки',
+    ];
+
+    $errors = validatePostData($lot, $rules, $required, $fields);
     $errors = array_filter($errors);
 
     if (!empty($_FILES['lot-img']['name'])) {

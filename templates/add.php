@@ -11,7 +11,7 @@
 
 <div class="page-wrapper">
     <main>
-        <?php $classname = $errors ? "form--invalid" : ""; ?>
+        <?php $classname = (isset($errors)) ? "form--invalid" : ""; ?>
         <form class="form form--add-lot container <?php echo $classname; ?>" action="add.php" method="post"
               enctype="multipart/form-data">
             <h2>Добавление лота</h2>
