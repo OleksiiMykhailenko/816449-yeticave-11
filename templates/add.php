@@ -21,7 +21,7 @@
                     <label for="lot-name">Наименование <sup>*</sup></label>
                     <input id="lot-name" type="text" name="lot-name"
                            value="<?php echo getPostVal('lot-name'); ?>" placeholder="Введите наименование лота">
-                    <?php if ($classname): ?>
+                    <?php if (!empty($errors['lot-name'])): ?>
                         <span class="form__error"><?php echo $errors['lot-name']; ?></span>
                     <?php endif ?>
                 </div>
@@ -36,7 +36,7 @@
                                 ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <?php if ($classname): ?>
+                    <?php if (!empty($errors['category-id'])): ?>
                         <span class="form__error"><?php echo $errors['category-id']; ?></span>
                     <?php endif ?>
                 </div>
@@ -46,7 +46,7 @@
                 <label for="message">Описание <sup>*</sup></label>
                 <textarea id="message" name="message"
                           placeholder="Напишите описание лота"><?php echo getPostVal('message'); ?></textarea>
-                <?php if ($classname): ?>
+                <?php if (!empty($errors['message'])): ?>
                     <span class="form__error"><?php echo $errors['message']; ?></span>
                 <?php endif ?>
             </div>
@@ -59,7 +59,7 @@
                     <label for="lot-img">
                         Добавить
                     </label>
-                    <?php if ($classname): ?>
+                    <?php if (!empty($errors['file'])): ?>
                         <span class="form__error"><?php echo $errors['file']; ?></span>
                     <?php endif ?>
                 </div>
@@ -70,7 +70,7 @@
                     <label for="lot-rate">Начальная цена <sup>*</sup></label>
                     <input id="lot-rate" type="text" name="lot-rate" placeholder="0"
                            value="<?php echo $lot['lot-rate']; ?>">
-                    <?php if ($classname): ?>
+                    <?php if (!empty($errors['lot-rate'])): ?>
                         <span class="form__error"><?php echo $errors['lot-rate']; ?></span>
                     <?php endif ?>
                 </div>
@@ -79,7 +79,7 @@
                     <label for="lot-step">Шаг ставки <sup>*</sup></label>
                     <input id="lot-step" type="text" name="lot-step" placeholder="0"
                            value="<?php echo $lot['lot-step']; ?>">
-                    <?php if ($classname): ?>
+                    <?php if (!empty($errors['lot-step'])): ?>
                         <span class="form__error"><?php echo $errors['lot-step']; ?></span>
                     <?php endif ?>
                 </div>
@@ -88,7 +88,7 @@
                     <label for="lot-date">Дата окончания торгов <sup>*</sup></label>
                     <input class="form__input-date" id="lot-date" type="text" name="lot-date"
                            value="<?php echo $lot['lot-date']; ?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
-                    <?php if ($classname): ?>
+                    <?php if (!empty($errors['lot-date'])): ?>
                         <span class="form__error"><?php echo $errors['lot-date']; ?></span>
                     <?php endif ?>
                 </div>
