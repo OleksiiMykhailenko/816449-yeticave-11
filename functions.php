@@ -123,3 +123,19 @@ function validateEmail($value)
         return "Введите корректный email";
     }
 }
+
+function get_user_by_email($email)
+{
+    global $sqlMail;
+    global $link;
+    $sqlMail = sprintf($sqlMail, $email);
+    $result = mysqli_query($link, $sqlMail);
+    if ($result) {
+        if (mysqli_num_rows($result)) {
+            return mysqli_fetch_all($result, MYSQLI_ASSOC)[0];
+        } else {
+            return null;
+        }
+    }
+    return null;
+}

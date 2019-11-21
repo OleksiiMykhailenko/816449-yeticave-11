@@ -2,8 +2,8 @@
 
 require_once('helpers.php');
 require_once('functions.php');
-require_once('data.php');
 require_once('init.php');
+require_once('data.php');
 require_once('sql_queries.php');
 
 $lotId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
@@ -15,7 +15,8 @@ if ($lot === null) {
 } else {
     $page_content = include_template('lot.php', ['categories' => $categories,
         'lot' => $lot,
-        'time_report' => get_dt_range($lot['date_of_completion'])]);
+        'time_report' => get_dt_range($lot['date_of_completion']),
+        'is_auth' => $is_auth]);
     $page_title = $lot['title'];
 }
 $layout_content = include_template('layout.php', [

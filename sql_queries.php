@@ -20,7 +20,8 @@ $sqlLot = "SELECT lots.id, lots.title, lots.starting_price, lots.image, lots.dat
 FROM lots JOIN category ON lots.category_id = category.id WHERE lots.id = '%s'";
 
 $sql = "INSERT INTO lots (title, description, category_id, date_of_completion, starting_price, bid_step, image, date_create, user_id, winner_id) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), 1, 2)";
+                            VALUES (?, ?, ?, ?, ?, ?, ?,NOW(), ?, 2)";
 
-$sqlMail = "SELECT id FROM users WHERE email = '$email'";
-$sqlSign = 'INSERT INTO users (date_of_registration, email, password, name, contacts) VALUES (NOW(), ?, ?, ?, ?)';
+$sqlMail = "SELECT * FROM users WHERE email = '%s'";
+$sqlSign = 'INSERT INTO users (date_of_registration, email, name, password, contacts) VALUES (NOW(), ?, ?, ?, ?)';
+

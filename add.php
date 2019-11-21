@@ -2,8 +2,8 @@
 
 require_once('helpers.php');
 require_once('functions.php');
-require_once('data.php');
 require_once('init.php');
+require_once('data.php');
 require_once('sql_queries.php');
 
 $result = mysqli_query($link, $sqlCategory);
@@ -71,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (count($errors)) {
         $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
     } else {
+        $lot['user_id'] = $_SESSION['user']['id'];
         $stmt = db_get_prepare_stmt($link, $sql, $lot);
         $res = mysqli_stmt_execute($stmt);
 
@@ -82,6 +83,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } else {
     $page_content = include_template('add.php', ['categories' => $categories]);
+}
+
+if (!$is_auth) {
+    http_response_code(403);
+    $page_content = include_template('error.php', ['error' => 'Страница доступна только для авторизованных пользователей']);
+    $page_title = 'YetiCave | 403';
 }
 
 $layout_content = include_template('layout.php', [
