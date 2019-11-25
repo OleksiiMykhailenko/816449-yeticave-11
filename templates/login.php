@@ -1,9 +1,9 @@
 <?php $form_classname = (isset($errors)) ? "form--invalid" : ""; ?>
-<form class="form container <?php echo $form_classname; ?>" action="login.php" method="post"> <!-- form--invalid -->
+<form class="form container <?php echo $form_classname; ?>" action="login.php" method="post">
     <h2>Вход</h2>
     <?php $classname = isset($errors['password']) ? "form__item--invalid" : "";
     $value = isset($form['password']) ? $form['password'] : ""; ?>
-    <div class="form__item <?php echo $classname; ?>"> <!-- form__item--invalid -->
+    <div class="form__item <?php echo $classname; ?>">
         <label for="email">E-mail <sup>*</sup></label>
         <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?php echo $value; ?>">
         <?php if (!empty($errors['email'])): ?>

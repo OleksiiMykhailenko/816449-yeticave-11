@@ -1,17 +1,12 @@
 <?php
 
 require_once('helpers.php');
-require_once('functions.php');
+require_once('functions/common.php');
 require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
-$result = mysqli_query($link, $sqlCategory);
-$cats_ids = [];
-if ($result) {
-    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    $cats_ids = array_column($categories, 'id');
-}
+$categories = db_fetch_data($sqlCategory, $link);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
@@ -36,10 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = array_filter($errors);
 
     if (empty($errors)) {
-
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $email = get_user_by_email($email);
         $res = mysqli_query($link, $sqlMail);
+
         if (mysqli_num_rows($res) > 0) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
         } else {
@@ -47,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = db_get_prepare_stmt($link, $sqlSign, [$form['email'], $form['name'], $password, $form['contacts']]);
             $res = mysqli_stmt_execute($stmt);
         }
+
         if (null !== $res && empty($errors)) {
             header("Location: login.php");
             exit();

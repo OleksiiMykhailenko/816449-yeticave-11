@@ -1,13 +1,14 @@
 <?php
 
 require_once('helpers.php');
-require_once('functions.php');
+require_once('functions/common.php');
 require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
 $result = mysqli_query($link, $sqlCategory);
 $cats_ids = [];
+
 if ($result) {
     $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
     $cats_ids = array_column($categories, 'id');
@@ -37,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return validateDate($value);
         },
     ];
+
     $lot = filter_input_array(INPUT_POST, ['lot-name' => FILTER_DEFAULT, 'message' => FILTER_DEFAULT,
         'category-id' => FILTER_DEFAULT, 'lot-date' => FILTER_DEFAULT, 'lot-rate' => FILTER_DEFAULT, 'lot-step' => FILTER_DEFAULT], true);
 
@@ -59,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $file_type = finfo_file($finfo, $tmp_name);
+
         if ($file_type !== "image/jpeg" && $file_type !== "image/png") {
             $errors['file'] = 'Загрузите картинку в формате jpeg/jpg/png';
         } else {
@@ -68,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $errors['file'] = 'Вы не загрузили файл';
     }
+
     if (count($errors)) {
         $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
     } else {
