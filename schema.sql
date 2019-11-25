@@ -40,3 +40,5 @@ CREATE TABLE `users` ( `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                  `email` VARCHAR(45) NOT NULL UNIQUE,
                                  `contacts` VARCHAR(128) NOT NULL
                                  );
+
+CREATE FULLTEXT INDEX lot_search ON lots(title, description);

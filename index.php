@@ -1,12 +1,16 @@
 <?php
 
 require_once('helpers.php');
-require_once('functions.php');
+require_once('functions/common.php');
 require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
+$categories = db_fetch_data($sqlCategory, $link);
+$lots = db_fetch_data($sqlLots, $link);
+
 $page_content = include_template('main.php', ['categories' => $categories, 'lots' => $lots]);
+
 $layout_content = include_template('layout.php', [
     'is_auth' => $is_auth,
     'user_name' => $user_name,

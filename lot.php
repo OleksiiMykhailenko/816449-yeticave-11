@@ -1,13 +1,16 @@
 <?php
 
 require_once('helpers.php');
-require_once('functions.php');
+require_once('functions/common.php');
 require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
+$categories = db_fetch_data($sqlCategory, $link);
+
 $lotId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $lot = get_lot_by_id($lotId);
+
 if ($lot === null) {
     http_response_code(404);
     $page_content = include_template('404.php');
@@ -19,6 +22,7 @@ if ($lot === null) {
         'is_auth' => $is_auth]);
     $page_title = $lot['title'];
 }
+
 $layout_content = include_template('layout.php', [
     'is_auth' => $is_auth,
     'user_name' => $user_name,
