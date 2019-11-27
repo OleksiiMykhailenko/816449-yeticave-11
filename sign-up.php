@@ -6,7 +6,7 @@ require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
-$categories = db_fetch_data($sqlCategory, $link);
+$categories = get_all_categories();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $rules = [
         'email' => function ($value) {
-            return validateEmail($value);
+            return validate_email($value);
         }
     ];
 
@@ -27,19 +27,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'contacts' => 'Контактные данные',
     ];
 
-    $errors = validatePostData($form, $rules, $required, $fields);
+    $errors = validate_post_data($form, $rules, $required, $fields);
     $errors = array_filter($errors);
 
     if (empty($errors)) {
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $email = get_user_by_email($email);
-        $res = mysqli_query($link, $sqlMail);
+        $res = mysqli_query($link, $sql_mail);
 
         if (mysqli_num_rows($res) > 0) {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
         } else {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
-            $stmt = db_get_prepare_stmt($link, $sqlSign, [$form['email'], $form['name'], $password, $form['contacts']]);
+            $stmt = db_get_prepare_stmt($link, $sql_sign, [$form['email'], $form['name'], $password, $form['contacts']]);
             $res = mysqli_stmt_execute($stmt);
         }
 

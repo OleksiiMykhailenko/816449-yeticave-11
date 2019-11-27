@@ -20,7 +20,7 @@
                 <div class="form__item <?php echo $classname; ?>">
                     <label for="lot-name">Наименование <sup>*</sup></label>
                     <input id="lot-name" type="text" name="lot-name"
-                           value="<?php echo getPostVal('lot-name'); ?>" placeholder="Введите наименование лота">
+                           value="<?php echo get_post_val('lot-name'); ?>" placeholder="Введите наименование лота">
                     <?php if (!empty($errors['lot-name'])): ?>
                         <span class="form__error"><?php echo $errors['lot-name']; ?></span>
                     <?php endif ?>
@@ -32,7 +32,7 @@
                         <option>Выберите категорию</option>
                         <?php foreach ($categories as $category): ?>
                             <option value="<?php echo $category['id'] ?>"
-                                    <?php if ($category['id'] === getPostVal('category-id')): ?>selected<?php endif; ?>><?php echo $category['title'];
+                                    <?php if ($category['id'] === get_post_val('category-id')): ?>selected<?php endif; ?>><?php echo $category['title'];
                                 ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -45,7 +45,7 @@
             <div class="form__item form__item--wide <?php echo $classname; ?>">
                 <label for="message">Описание <sup>*</sup></label>
                 <textarea id="message" name="message"
-                          placeholder="Напишите описание лота"><?php echo getPostVal('message'); ?></textarea>
+                          placeholder="Напишите описание лота"><?php echo get_post_val('message'); ?></textarea>
                 <?php if (!empty($errors['message'])): ?>
                     <span class="form__error"><?php echo $errors['message']; ?></span>
                 <?php endif ?>

@@ -6,7 +6,7 @@ require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
-$categories = db_fetch_data($sqlCategory, $link);
+$categories = get_all_categories();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
     $email = get_user_by_email($email);
-    $res = mysqli_query($link, $sqlMail);
+    $res = mysqli_query($link, $sql_mail);
     $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
 
     if (!count($errors) and $user) {

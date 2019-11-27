@@ -6,7 +6,7 @@ require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
-$categories = db_fetch_data($sqlCategory, $link);
+$categories = get_all_categories();
 
 $lots = [];
 $search = $_GET['search'] ?? '';
@@ -17,18 +17,21 @@ if ($search) {
     $page_items = 9;
 
     $result = mysqli_query($link, "SELECT COUNT(*) as cnt FROM lots "
-        . "WHERE MATCH(title, description) AGAINST( '". $search ."')");
+        . "WHERE MATCH(title, description) AGAINST( '". $search ."') AND lots.date_of_completion > NOW()");
 
     $items_count = mysqli_fetch_assoc($result)['cnt'];
-    $pages_count = ceil($items_count / $page_items);
+
+    if ($page_items > 0) {
+        $pages_count = ceil($items_count / $page_items);
+    }
     $offset = ($cur_page - 1) * $page_items;
     $pages = range(1, $pages_count);
 
-    $sqlSearch = "SELECT lots.id, lots.title, lots.starting_price, lots.image, lots.date_of_completion, category.title as category FROM lots "
+    $sql_search = "SELECT lots.id, lots.title, lots.starting_price, lots.image, lots.date_of_completion, category.title as category FROM lots "
         . "JOIN category ON lots.category_id = category.id "
-        . "WHERE MATCH(lots.title, description) AGAINST(?)"
+        . "WHERE MATCH(lots.title, description) AGAINST(?) AND lots.date_of_completion > NOW() "
         . "ORDER BY lots.date_create DESC LIMIT " . $page_items . " OFFSET " . $offset;
-    $stmt = db_get_prepare_stmt($link, $sqlSearch, [$search]);
+    $stmt = db_get_prepare_stmt($link, $sql_search, [$search]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $lots = mysqli_fetch_all($result, MYSQLI_ASSOC);

@@ -6,13 +6,9 @@ require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
-$result = mysqli_query($link, $sqlCategory);
-$cats_ids = [];
+$categories = get_all_categories();
 
-if ($result) {
-    $categories = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    $cats_ids = array_column($categories, 'id');
-}
+$cats_ids = array_column($categories, 'id');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $required = ['lot-name', 'category-id', 'message', 'lot-img', 'lot-rate', 'lot-step', 'lot-date'];
@@ -20,22 +16,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $rules = [
         'category-id' => function ($value) use ($cats_ids) {
-            return validateCategory($value, $cats_ids);
+            return validate_category($value, $cats_ids);
         },
         'lot-name' => function ($value) {
-            return validateLength($value, 10, 200);
+            return validate_length($value, 10, 200);
         },
         'message' => function ($value) {
-            return validateLength($value, 10, 3000);
+            return validate_length($value, 10, 3000);
         },
         'lot-rate' => function ($value) {
-            return validatePrice($value);
+            return validate_price($value);
         },
         'lot-step' => function ($value) {
-            return validateStep($value);
+            return validate_step($value);
         },
         'lot-date' => function ($value) {
-            return validateDate($value);
+            return validate_date($value);
         },
     ];
 
@@ -51,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'lot-step' => 'Шаг ставки',
     ];
 
-    $errors = validatePostData($lot, $rules, $required, $fields);
+    $errors = validate_post_data($lot, $rules, $required, $fields);
     $errors = array_filter($errors);
 
     if (!empty($_FILES['lot-img']['name'])) {

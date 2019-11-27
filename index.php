@@ -6,8 +6,9 @@ require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
-$categories = db_fetch_data($sqlCategory, $link);
-$lots = db_fetch_data($sqlLots, $link);
+$categories = get_all_categories();
+
+$lots = get_all_lots();
 
 $page_content = include_template('main.php', ['categories' => $categories, 'lots' => $lots]);
 

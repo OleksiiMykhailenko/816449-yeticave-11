@@ -1,10 +1,18 @@
 <?php
 
 /**
+ * @return false|mysqli - соединение с базой данных
+ */
+function connect_to_db()
+{
+    return mysqli_connect("localhost", "root", "root", "YetiCave");;
+}
+
+/**
  * Функция обработки запроса и соединения
  * @param $sql - запрос к базе данных
  * @param $link - соединение с базой данных
- * @return array|bool|mysqli_result
+ * @return array|bool|mysqli_result - возвращаем массив значений
  */
 function db_fetch_data($sql, $link)
 {
@@ -17,15 +25,15 @@ function db_fetch_data($sql, $link)
 
 /**
  * Функция получения значения из параметра запроса
- * @param string $lotId строка с наименованием параметра запроса, получение лота по его id
+ * @param string $lot_id строка с наименованием параметра запроса, получение лота по его id
  * @return string значение параметра запроса
  */
-function get_lot_by_id($lotId)
+function get_lot_by_id($lot_id)
 {
-    global $sqlLot;
+    global $sql_lot;
     global $link;
-    $sqlLot = sprintf($sqlLot, $lotId);
-    $result = mysqli_query($link, $sqlLot);
+    $sql_lot = sprintf($sql_lot, $lot_id);
+    $result = mysqli_query($link, $sql_lot);
     if ($result) {
         if (mysqli_num_rows($result)) {
             return mysqli_fetch_all($result, MYSQLI_ASSOC)[0];
@@ -34,16 +42,6 @@ function get_lot_by_id($lotId)
         }
     }
     return null;
-}
-
-/**
- * Функция получения значения из параметра пост-запроса
- * @param string $name строка с наименованием параметра пост-запроса
- * @return string значение параметра пост-запроса
- */
-function getPostVal($name)
-{
-    return filter_input(INPUT_POST, $name);
 }
 
 /**
@@ -53,10 +51,10 @@ function getPostVal($name)
  */
 function get_user_by_email($email)
 {
-    global $sqlMail;
+    global $sql_mail;
     global $link;
-    $sqlMail = sprintf($sqlMail, $email);
-    $result = mysqli_query($link, $sqlMail);
+    $sql_mail = sprintf($sql_mail, $email);
+    $result = mysqli_query($link, $sql_mail);
     if ($result) {
         if (mysqli_num_rows($result)) {
             return mysqli_fetch_all($result, MYSQLI_ASSOC)[0];
@@ -67,18 +65,24 @@ function get_user_by_email($email)
     return null;
 }
 
-//function get_lots_by_search($link, $search)
-//{
-//    $sqlCount = "SELECT COUNT(*) as cnt FROM lots "
-//        . "WHERE MATCH(title, description) AGAINST( '" . $search . "')";
-//    $sqlCount = sprintf($sqlCount, $search);
-//    $result = mysqli_query($link, $sqlCount);
-//    if ($result) {
-//        if (mysqli_num_rows($result)) {
-//            return mysqli_fetch_all($result, MYSQLI_ASSOC)[0];
-//        } else {
-//            return null;
-//        }
-//    }
-//    return null;
-//}
+/**
+ * @return array|bool|mysqli_result - выполнение запроса на получение всех категорий, обработка запроса
+ */
+function get_all_categories()
+{
+    $sql = "SELECT * FROM category";
+
+    return db_fetch_data($sql, connect_to_db());
+}
+
+/**
+ * @return array|bool|mysqli_result - выполнение запроса на получение всех лотов, обработка запроса
+ */
+function get_all_lots()
+{
+    $sql = "SELECT lots.id, lots.title, lots.starting_price, lots.image, lots.date_of_completion, lots.bid_step, category.title as category 
+FROM lots JOIN category ON lots.category_id = category.id
+WHERE lots.date_of_completion > CURDATE() ORDER BY lots.date_create DESC";
+
+    return db_fetch_data($sql, connect_to_db());
+}

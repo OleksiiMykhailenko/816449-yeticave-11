@@ -6,7 +6,7 @@
     <div class="form__item <?php echo $classname; ?>">
         <label for="email">E-mail <sup>*</sup></label>
         <input id="email" type="text" name="email" placeholder="Введите e-mail"
-               value="<?php echo getPostVal('email'); ?>">
+               value="<?php echo get_post_val('email'); ?>">
         <?php if (!empty($errors['email'])): ?>
             <span class="form__error"><?php echo $errors['email']; ?></span>
         <?php endif ?>
@@ -23,7 +23,7 @@
     <div class="form__item <?php echo $classname; ?>">
         <label for="name">Имя <sup>*</sup></label>
         <input id="name" type="text" name="name" placeholder="Введите имя"
-               value="<?php echo getPostVal('name'); ?>">
+               value="<?php echo get_post_val('name'); ?>">
         <?php if (!empty($errors['name'])): ?>
             <span class="form__error"><?php echo $errors['name']; ?></span>
         <?php endif ?>
@@ -32,7 +32,7 @@
     <div class="form__item <?php echo $classname; ?>">
         <label for="contacts">Контактные данные <sup>*</sup></label>
         <textarea id="contacts" name="contacts"
-                  placeholder="Напишите как с вами связаться"><?php echo getPostVal('contacts'); ?></textarea>
+                  placeholder="Напишите как с вами связаться"><?php echo get_post_val('contacts'); ?></textarea>
         <?php if (!empty($errors['contacts'])): ?>
             <span class="form__error"><?php echo $errors['contacts']; ?></span>
         <?php endif ?>
