@@ -21,9 +21,8 @@ FROM lots JOIN category ON lots.category_id = category.id WHERE lots.id = '%s'";
 /*
  * $sql - выполняем запрос на добавление нового лота. На месте значений располагаются знаки вопроса - плейсхолдеры
  */
-$sql = "INSERT INTO lots (title, description, category_id, date_of_completion, starting_price, bid_step, image, date_create, user_id, winner_id) 
-                            VALUES (?, ?, ?, ?, ?, ?, ?,NOW(), ?, ?)";
-
+$sql = 'INSERT INTO lots (date_create, user_id, title, description, starting_price, bid_step, date_of_completion, category_id, image)
+        VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)';
 /*
  * $sql_mail - выполняем запрос на поиск в таблице users пользователя с переданным email
  * $sql_sign - выполняем запрос на добавление нового пользователя в БД

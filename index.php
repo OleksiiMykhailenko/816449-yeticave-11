@@ -6,6 +6,8 @@ require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
+fill_lot_winners();
+
 $categories = get_all_categories();
 
 $lots = get_all_lots();

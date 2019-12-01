@@ -6,10 +6,12 @@ require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
+fill_lot_winners();
+
 $categories = get_all_categories();
 
 $sql_rates = <<<SQL
-SELECT lots.winner_id, (SELECT users.contacts FROM users WHERE users.id = lots.winner_id) AS contacts, lots.id AS lot_id, lots.image AS lot_img, lots.date_of_completion, lots.title AS lot_name, category.title AS lot_category, rates.price, rates.date_stsrting_rate FROM rates 
+SELECT (SELECT users.contacts FROM users WHERE users.id = lots.user_id) AS contacts, lots.id AS lot_id, lots.image AS lot_img, lots.date_of_completion, lots.title AS lot_name, category.title AS lot_category, rates.price, rates.date_starting_rate FROM rates 
 JOIN lots ON lots.id = rates.lot_id JOIN category ON category.id = lots.category_id  
 WHERE rates.user_id = $user_id ORDER BY rates.date_starting_rate DESC
 SQL;
@@ -26,10 +28,11 @@ if ($result) {
         foreach ($rates as $key => $rate) {
             $date_of_completion = get_dt_range($rate['date_of_completion']);
             $rates[$key]['timer_class'] = '';
-            $rates[$key]['timer_message'] = date_format(date_create($rate['expiry_date']), 'd.m.Y в H:i');
+            $rates[$key]['timer_message'] = date_format(date_create($rate['date_of_completion']), 'd.m.Y в H:i');
             if ((int)$date_of_completion[0] === 0 && !empty($date_of_completion)) {
                 $rates[$key]['timer_class'] = 'timer--finishing';
                 $rates[$key]['timer_message'] = implode(':', $date_of_completion);
+                $rates[$key]['rate_class'] = 'rates__item';
             }
             if (date_create("now") > date_create($rate['date_of_completion'])) {
                 $rates[$key]['timer_class'] = 'timer--end';

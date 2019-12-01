@@ -30,7 +30,7 @@ if ($result) {
         $page_title = '404 Страница не найдена';
     } else {
         $lot = mysqli_fetch_all($result, MYSQLI_ASSOC)[0];
-        $min_price = $lot['price'];
+        $min_price = $lot['starting_price'];
         $step = $lot['bid_step'];
         $rates = [];
 
@@ -55,9 +55,10 @@ if ($result) {
 
             if (!$errors['cost']) {
                 $rate = [$user_id, $lot['id'], $form['cost']];
-                $sql = 'INSERT INTO rates (user_id, lot_id, price) VALUES (?, ?, ?)';
+                $sql = "INSERT INTO rates (date_starting_rate, user_id, lot_id, price) VALUES (NOW(), ?, ?, ?)";
                 $stmt = db_get_prepare_stmt($link, $sql, $rate);
                 $res = mysqli_stmt_execute($stmt);
+
                 if ($res) {
                     $lot_id = mysqli_insert_id($link);
                     header("Location: lot.php?id=" . $lot['id']);
@@ -71,11 +72,12 @@ if ($result) {
 
         $page_content = include_template('lot.php', ['categories' => $categories,
             'lot' => $lot,
-            'expiryTime' => get_dt_range($lot['date_of_completion']),
+            'time_report' => get_dt_range($lot['date_of_completion']),
             'is_auth' => $is_auth,
             'show_rate_block' => $show_rate_block,
             'errors' => $errors,
-            'rates' => $rates]);
+            'rates' => $rates
+        ]);
     }
 }
 

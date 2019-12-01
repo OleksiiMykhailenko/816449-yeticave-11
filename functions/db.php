@@ -86,3 +86,17 @@ WHERE lots.date_of_completion > CURDATE() ORDER BY lots.date_create DESC";
 
     return db_fetch_data($sql, connect_to_db());
 }
+
+function fill_lot_winners()
+{
+    $sql = "SELECT lots.id FROM lots WHERE lots.date_of_completion < CURDATE() AND lots.is_closed = '0' ";
+    $lots = mysqli_query(connect_to_db(), $sql);
+    $lots = mysqli_fetch_all($lots, MYSQLI_ASSOC);
+    foreach ($lots as $key => $value) {
+        $id = $value['id'];
+        $sql_winner_update = "UPDATE rates SET rates.is_winner = 1 WHERE rates.lot_id = '$id' ORDER BY rates.price DESC LIMIT 1";
+        $sql_winner = mysqli_query(connect_to_db(), $sql_winner_update);
+    }
+    $sql_lots_update = "UPDATE lots SET lots.is_closed = 1 WHERE lots.date_of_completion < CURDATE() AND lots.is_closed = 0";
+    $sql_closed = mysqli_query(connect_to_db(), $sql_lots_update);
+}

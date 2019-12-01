@@ -8,7 +8,7 @@
         <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?php echo $value; ?>">
         <?php if (!empty($errors['email'])): ?>
             <span class="form__error"><?php echo $errors['email']; ?></span>
-        <?php endif ?>
+        <?php endif; ?>
     </div>
     <?php $classname = isset($errors['password']) ? "form__item--invalid" : "";
     $value = isset($form['password']) ? $form['password'] : ""; ?>
@@ -17,7 +17,7 @@
         <input id="password" type="password" name="password" placeholder="Введите пароль">
         <?php if (!empty($errors['password'])): ?>
             <span class="form__error"><?php echo $errors['password']; ?></span>
-        <?php endif ?>
+        <?php endif; ?>
     </div>
     <button type="submit" class="button">Войти</button>
 </form>

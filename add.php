@@ -72,6 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
     } else {
         $lot['user_id'] = $_SESSION['user']['id'];
+        $sql = 'INSERT INTO lots (date_create, user_id, title, description, starting_price, bid_step, date_of_completion, image, category_id, is_closed)
+        VALUES (NOW(), "' . $_SESSION['user']['id'] . '", ?, ?, ?, ?, ?, ?, ?, 0)';
         $stmt = db_get_prepare_stmt($link, $sql, $lot);
         $res = mysqli_stmt_execute($stmt);
 
