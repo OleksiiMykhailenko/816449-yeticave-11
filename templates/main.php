@@ -5,9 +5,9 @@
     <ul class="promo__list">
 
         <?php foreach ($categories as $category): ?>
-            <li class="promo__item promo__item--<?php echo htmlspecialchars($category['character_code']); ?>">
+            <li class="promo__item promo__item--<?php echo htmlspecialchars($category['character_code'] ?? ''); ?>">
                 <a class="promo__link"
-                <a href="category.php?id=<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['title']); ?></a>
+                <a href="category.php?id=<?php echo $category['id'] ?? ''; ?>"><?php echo htmlspecialchars($category['title'] ?? ''); ?></a>
             </li>
         <?php endforeach; ?>
 

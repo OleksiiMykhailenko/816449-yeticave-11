@@ -58,7 +58,7 @@
 
             <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="category.php?id=<?php echo $category['id']; ?>"><?php echo htmlspecialchars($category['title']); ?></a>
+                    <a href="category.php?id=<?php echo $category['id'] ?? ''; ?>"><?php echo htmlspecialchars($category['title'] ?? ''); ?></a>
                 </li>
             <?php endforeach; ?>
 

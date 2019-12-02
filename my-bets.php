@@ -6,15 +6,17 @@ require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
-fill_lot_winners();
-
 $categories = get_all_categories();
 
-$sql_rates = <<<SQL
-SELECT (SELECT users.contacts FROM users WHERE users.id = lots.user_id) AS contacts, lots.id AS lot_id, lots.image AS lot_img, lots.date_of_completion, lots.title AS lot_name, category.title AS lot_category, rates.price, rates.date_starting_rate FROM rates 
-JOIN lots ON lots.id = rates.lot_id JOIN category ON category.id = lots.category_id  
-WHERE rates.user_id = $user_id ORDER BY rates.date_starting_rate DESC
-SQL;
+$sql_rates = "SELECT rates.date_starting_rate, rates.price, rates.is_winner, rates.lot_id, lots.title AS lot_name, lots.image AS lot_img, lots.date_of_completion, category.title AS lot_category, users.contacts FROM rates
+LEFT JOIN lots
+ON rates.lot_id = lots.id
+LEFT JOIN category 
+ON lots.category_id = category.id
+LEFT JOIN users 
+ON rates.user_id = users.id
+WHERE rates.user_id = $user_id
+ORDER BY rates.id DESC";
 
 $result = mysqli_query($link, $sql_rates);
 
@@ -26,6 +28,7 @@ if ($result) {
         $rates = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         foreach ($rates as $key => $rate) {
+
             $date_of_completion = get_dt_range($rate['date_of_completion']);
             $rates[$key]['timer_class'] = '';
             $rates[$key]['timer_message'] = date_format(date_create($rate['date_of_completion']), 'd.m.Y в H:i');
@@ -39,7 +42,7 @@ if ($result) {
                 $rates[$key]['timer_message'] = 'Торги окончены';
                 $rates[$key]['rate_class'] = 'rates__item--end';
             }
-            if ($rate['winner_id']) {
+            if ($rate['is_winner']){
                 $rates[$key]['timer_class'] = 'timer--win';
                 $rates[$key]['timer_message'] = 'Ваша ставка выиграла';
                 $rates[$key]['rate_class'] = 'rates__item--win';
@@ -57,7 +60,7 @@ if ($result) {
 $layout_content = include_template('layout.php', [
     'is_auth' => $is_auth,
     'user_name' => $user_name,
-    'title' => 'Мои ставки',
+    'title' => 'YetiCave - Мои ставки',
     'categories' => $categories,
     'content' => $page_content
 ]);
