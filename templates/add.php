@@ -22,7 +22,7 @@
                     <input id="lot-name" type="text" name="lot-name"
                            value="<?php echo get_post_val('lot-name'); ?>" placeholder="Введите наименование лота">
                     <?php if (!empty($errors['lot-name'])): ?>
-                        <span class="form__error"><?php echo $errors['lot-name']  ?? ''; ?></span>
+                        <span class="form__error"><?php echo $errors['lot-name']; ?></span>
                     <?php endif ?>
                 </div>
                 <?php $classname = isset($errors['category-id']) ? "form__item--invalid" : ""; ?>
@@ -37,7 +37,7 @@
                         <?php endforeach; ?>
                     </select>
                     <?php if (!empty($errors['category-id'])): ?>
-                        <span class="form__error"><?php echo $errors['category-id'] ?? ''; ?></span>
+                        <span class="form__error"><?php echo $errors['category-id']; ?></span>
                     <?php endif ?>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                 <textarea id="message" name="message"
                           placeholder="Напишите описание лота"><?php echo get_post_val('message'); ?></textarea>
                 <?php if (!empty($errors['message'])): ?>
-                    <span class="form__error"><?php echo $errors['message'] ?? ''; ?></span>
+                    <span class="form__error"><?php echo $errors['message']; ?></span>
                 <?php endif ?>
             </div>
             <?php $classname = isset($errors['file']) ? "form__item--invalid" : ""; ?>
@@ -60,7 +60,7 @@
                         Добавить
                     </label>
                     <?php if (!empty($errors['file'])): ?>
-                        <span class="form__error"><?php echo $errors['file'] ?? ''; ?></span>
+                        <span class="form__error"><?php echo $errors['file']; ?></span>
                     <?php endif ?>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                     <input id="lot-rate" type="text" name="lot-rate" placeholder="0"
                            value="<?php echo $lot['lot-rate'] ?? ''; ?>">
                     <?php if (!empty($errors['lot-rate'])): ?>
-                        <span class="form__error"><?php echo $errors['lot-rate'] ?? ''; ?></span>
+                        <span class="form__error"><?php echo $errors['lot-rate']; ?></span>
                     <?php endif ?>
                 </div>
                 <?php $classname = isset($errors['lot-step']) ? "form__item--invalid" : ""; ?>
@@ -80,7 +80,7 @@
                     <input id="lot-step" type="text" name="lot-step" placeholder="0"
                            value="<?php echo $lot['lot-step'] ?? ''; ?>">
                     <?php if (!empty($errors['lot-step'])): ?>
-                        <span class="form__error"><?php echo $errors['lot-step'] ?? ''; ?></span>
+                        <span class="form__error"><?php echo $errors['lot-step']; ?></span>
                     <?php endif ?>
                 </div>
                 <?php $classname = isset($errors['lot-date']) ? "form__item--invalid" : ""; ?>
@@ -89,7 +89,7 @@
                     <input class="form__input-date" id="lot-date" type="text" name="lot-date"
                            value="<?php echo $lot['lot-date'] ?? ''; ?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
                     <?php if (!empty($errors['lot-date'])): ?>
-                        <span class="form__error"><?php echo $errors['lot-date'] ?? ''; ?></span>
+                        <span class="form__error"><?php echo $errors['lot-date']; ?></span>
                     <?php endif ?>
                 </div>
             </div>

@@ -6,7 +6,7 @@ require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
-$categories = get_all_categories();
+$categories = get_all_categories($link);
 
 $sql_rates = "SELECT rates.date_starting_rate, rates.price, rates.is_winner, rates.lot_id, lots.title AS lot_name, lots.image AS lot_img, lots.date_of_completion, category.title AS lot_category, users.contacts FROM rates
 LEFT JOIN lots
@@ -28,7 +28,6 @@ if ($result) {
         $rates = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         foreach ($rates as $key => $rate) {
-
             $date_of_completion = get_dt_range($rate['date_of_completion']);
             $rates[$key]['timer_class'] = '';
             $rates[$key]['timer_message'] = date_format(date_create($rate['date_of_completion']), 'd.m.Y в H:i');

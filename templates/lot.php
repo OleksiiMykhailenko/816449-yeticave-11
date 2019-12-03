@@ -12,8 +12,8 @@
         <div class="lot-item__right">
                 <div class="lot-item__state">
                     <div
-                        class="lot__timer timer <?php echo $time_report['hours'] === '00' ? 'timer--finishing' : '' ?>">
-                        <?php echo implode(':', $time_report); ?>
+                        class="lot__timer timer <?php echo (!empty($time_report['hours'] === '00') ? 'timer--finishing' : ''); ?>">
+                        <?php echo is_array($time_report) ? implode(':', $time_report) : 'error'; ?>
                     </div>
                     <div class="lot-item__cost-state">
                         <div class="lot-item__rate">

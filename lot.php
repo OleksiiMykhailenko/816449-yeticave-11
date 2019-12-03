@@ -6,7 +6,7 @@ require_once('init.php');
 require_once('data.php');
 require_once('sql_queries.php');
 
-$categories = get_all_categories();
+$categories = get_all_categories($link);
 
 $lot_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $sql_lot = <<<SQL
