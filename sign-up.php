@@ -4,7 +4,6 @@ require_once('helpers.php');
 require_once('functions/common.php');
 require_once('init.php');
 require_once('data.php');
-require_once('sql_queries.php');
 
 $categories = get_all_categories($link);
 
@@ -32,22 +31,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $email = get_user_by_email($email);
-        $res = mysqli_query($link, $sql_mail);
+        $email = get_user_by_email_result($link, $email);
 
-        if (mysqli_num_rows($res) > 0) {
-            $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
-        } else {
+        if (is_null($email)) {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
+            $sql_sign = 'INSERT INTO users (date_of_registration, email, name, password, contacts) VALUES (NOW(), ?, ?, ?, ?)';
             $stmt = db_get_prepare_stmt($link, $sql_sign, [$form['email'], $form['name'], $password, $form['contacts']]);
             $res = mysqli_stmt_execute($stmt);
-        }
-
-        if (null !== $res && empty($errors)) {
-            header("Location: login.php");
-            exit();
+        } else {
+            $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
         }
     }
+
+    if (null !== $res && empty($errors)) {
+        header("Location: login.php");
+        exit();
+    }
+
 }
 
 $page_content = include_template('sign-up.php', ['categories' => $categories, 'errors' => $errors,]);

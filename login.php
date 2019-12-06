@@ -4,7 +4,6 @@ require_once('helpers.php');
 require_once('functions/common.php');
 require_once('init.php');
 require_once('data.php');
-require_once('sql_queries.php');
 
 $categories = get_all_categories($link);
 
@@ -23,11 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = array_filter($errors);
 
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $email = get_user_by_email($email);
-    $res = mysqli_query($link, $sql_mail);
-    $user = $res ? mysqli_fetch_array($res, MYSQLI_ASSOC) : null;
+    $email = mysqli_real_escape_string($link, $form['email']);
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($link, $sql);
+    $user = $result ? mysqli_fetch_array($result, MYSQLI_ASSOC) : null;
 
-    if (!count($errors) and $user) {
+    if (!count($errors) && $user) {
 
         if (password_verify($form['password'], $user['password'])) {
             $_SESSION['user'] = $user;

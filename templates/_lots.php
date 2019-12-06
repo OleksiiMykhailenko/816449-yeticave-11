@@ -13,7 +13,7 @@
                 <span
                     class="lot__cost"><?php echo formatting_sum(htmlspecialchars($lot['starting_price']) ?? ''); ?></span>
             </div>
-            <div class="lot__timer timer <?php echo (!empty($time_report['hours'] === '00') ? 'timer--finishing' : ''); ?>">
+            <div class="lot__timer timer <?php echo (int) $time_report['hours'] === '00' ? 'timer--finishing' : ''; ?>">
                 <?php echo is_array($time_report) ? implode(':', $time_report) : 'error'; ?>
             </div>
         </div>
