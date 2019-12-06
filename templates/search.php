@@ -5,7 +5,7 @@
 
             <?php foreach ($lots as $lot): ?>
                 <?php echo include_template('_lots.php', ['lot' => $lot,
-                    'time_report' => get_dt_range($lot['date_of_completion'])]) ?>
+                    'time_report' => get_dt_range($lot['date_of_completion'])]); ?>
             <?php endforeach; ?>
 
         </ul>

@@ -28,7 +28,7 @@
                 <?php if ($is_auth): ?>
                     <div class="user-menu__logged">
                         <p><?php echo $user_name; ?></p>
-                        <a class="user-menu__bets" href="pages/my-bets.html">Мои ставки</a>
+                        <a class="user-menu__bets" href="my-bets.php">Мои ставки</a>
                         <a class="user-menu__logout" href="/logout.php">Выход</a>
                     </div>
                 <?php else: ?>
@@ -58,7 +58,7 @@
 
             <?php foreach ($categories as $category): ?>
                 <li class="nav__item">
-                    <a href="pages/all-lots.html"><?php echo $category['title']; ?></a>
+                    <a href="category.php?id=<?php echo $category['id'] ?? ''; ?>"><?php echo htmlspecialchars($category['title'] ?? ''); ?></a>
                 </li>
             <?php endforeach; ?>
 

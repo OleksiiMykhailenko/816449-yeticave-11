@@ -20,7 +20,7 @@
                 <div class="form__item <?php echo $classname; ?>">
                     <label for="lot-name">Наименование <sup>*</sup></label>
                     <input id="lot-name" type="text" name="lot-name"
-                           value="<?php echo getPostVal('lot-name'); ?>" placeholder="Введите наименование лота">
+                           value="<?php echo get_post_val('lot-name'); ?>" placeholder="Введите наименование лота">
                     <?php if (!empty($errors['lot-name'])): ?>
                         <span class="form__error"><?php echo $errors['lot-name']; ?></span>
                     <?php endif ?>
@@ -31,8 +31,8 @@
                     <select id="category" name="category-id">
                         <option>Выберите категорию</option>
                         <?php foreach ($categories as $category): ?>
-                            <option value="<?php echo $category['id'] ?>"
-                                    <?php if ($category['id'] === getPostVal('category-id')): ?>selected<?php endif; ?>><?php echo $category['title'];
+                            <option value="<?php echo $category['id'] ?? ''; ?>"
+                                    <?php if ($category['id'] === get_post_val('category-id')): ?>selected<?php endif; ?>><?php echo $category['title'] ?? '';
                                 ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -45,7 +45,7 @@
             <div class="form__item form__item--wide <?php echo $classname; ?>">
                 <label for="message">Описание <sup>*</sup></label>
                 <textarea id="message" name="message"
-                          placeholder="Напишите описание лота"><?php echo getPostVal('message'); ?></textarea>
+                          placeholder="Напишите описание лота"><?php echo get_post_val('message'); ?></textarea>
                 <?php if (!empty($errors['message'])): ?>
                     <span class="form__error"><?php echo $errors['message']; ?></span>
                 <?php endif ?>
@@ -55,7 +55,7 @@
                 <label>Изображение <sup>*</sup></label>
                 <div class="form__input-file">
                     <input class="visually-hidden" type="file" id="lot-img" name="lot-img"
-                           value="<?php echo $lot['path']; ?>">
+                           value="<?php echo $lot['path'] ?? ''; ?>">
                     <label for="lot-img">
                         Добавить
                     </label>
@@ -69,7 +69,7 @@
                 <div class="form__item form__item--small <?php echo $classname; ?>">
                     <label for="lot-rate">Начальная цена <sup>*</sup></label>
                     <input id="lot-rate" type="text" name="lot-rate" placeholder="0"
-                           value="<?php echo $lot['lot-rate']; ?>">
+                           value="<?php echo $lot['lot-rate'] ?? ''; ?>">
                     <?php if (!empty($errors['lot-rate'])): ?>
                         <span class="form__error"><?php echo $errors['lot-rate']; ?></span>
                     <?php endif ?>
@@ -78,7 +78,7 @@
                 <div class="form__item form__item--small <?php echo $classname; ?>">
                     <label for="lot-step">Шаг ставки <sup>*</sup></label>
                     <input id="lot-step" type="text" name="lot-step" placeholder="0"
-                           value="<?php echo $lot['lot-step']; ?>">
+                           value="<?php echo $lot['lot-step'] ?? ''; ?>">
                     <?php if (!empty($errors['lot-step'])): ?>
                         <span class="form__error"><?php echo $errors['lot-step']; ?></span>
                     <?php endif ?>
@@ -87,7 +87,7 @@
                 <div class="form__item <?php echo $classname; ?>">
                     <label for="lot-date">Дата окончания торгов <sup>*</sup></label>
                     <input class="form__input-date" id="lot-date" type="text" name="lot-date"
-                           value="<?php echo $lot['lot-date']; ?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
+                           value="<?php echo $lot['lot-date'] ?? ''; ?>" placeholder="Введите дату в формате ГГГГ-ММ-ДД">
                     <?php if (!empty($errors['lot-date'])): ?>
                         <span class="form__error"><?php echo $errors['lot-date']; ?></span>
                     <?php endif ?>
