@@ -7,7 +7,7 @@ require_once('data.php');
 
 $categories = get_all_categories($link);
 
-$sql_rates = "SELECT rates.date_starting_rate, rates.price, rates.is_winner, rates.lot_id, lots.title AS lot_name, lots.image AS lot_img, lots.date_of_completion, category.title AS lot_category, users.contacts FROM rates
+$sql_rates = "SELECT rates.date_starting_rate, rates.price, rates.is_winner, rates.lot_id, lots.title AS lot_name, lots.image AS lot_img, lots.date_of_completion, category.title AS lot_category, (SELECT users.contacts FROM users WHERE users.id = lots.user_id) AS contacts FROM rates
 LEFT JOIN lots
 ON rates.lot_id = lots.id
 LEFT JOIN category 
