@@ -1,0 +1,13 @@
+{
+    "name": "dell/816449-yeticave-11",
+    "authors": [
+        {
+            "name": "Oleksii Mykhailenko",
+            "email": "mykhailenko.oleksii33@gmail.com"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.0",
+      "ext-mysqli": "*"
+    }
+}

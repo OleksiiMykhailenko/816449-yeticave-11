@@ -128,6 +128,7 @@ function get_active_lots_by_category_id($link, $id, $limit, $offset)
 }
 
 /**
+ * @param $link - Соединение с базой данных
  * Функция выполнения запроса на получение id всех лотов, у которых дата окончания лота < текущей, а также поле is_closed = 0
  * Обработка данного запроса
  * Получение массива
@@ -137,7 +138,7 @@ function get_active_lots_by_category_id($link, $id, $limit, $offset)
  */
 function fill_lot_winners($link)
 {
-    $sql = "SELECT lots.id FROM lots WHERE lots.date_of_completion < CURDATE() AND lots.is_closed = '0' ";
+    $sql = "SELECT lots.id FROM lots WHERE lots.date_of_completion <= CURDATE() AND lots.is_closed = 0";
     $lots = mysqli_query($link, $sql);
     $lots = mysqli_fetch_all($lots, MYSQLI_ASSOC);
 
@@ -147,7 +148,7 @@ function fill_lot_winners($link)
         mysqli_query($link, $sql_winner_update);
     }
 
-    $sql_lots_update = "UPDATE lots SET lots.is_closed = 1 WHERE lots.date_of_completion < CURDATE() AND lots.is_closed = 0";
+    $sql_lots_update = "UPDATE lots SET lots.is_closed = 1 WHERE lots.date_of_completion <= CURDATE() AND lots.is_closed = 0";
     mysqli_query($link, $sql_lots_update);
 }
 
