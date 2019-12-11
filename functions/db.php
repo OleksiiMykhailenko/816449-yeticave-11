@@ -190,3 +190,84 @@ function get_user_by_email_result($link, $email)
 
     return null;
 }
+
+/**
+ * Функция ыполняет подготовленный запрос к бд на получение количества лотов,
+ * которые соответствуют написанному в поисковой строке
+ * @param $link mysqli Ресурс соединения
+ * @param $search - искомое значение
+ * @return - объект mysqli_stmt_get_result
+ */
+function get_lots_count_by_search($link, $search)
+{
+    $sql = "SELECT COUNT(*) as cnt FROM lots "
+        . "WHERE MATCH(title, description) AGAINST(?) AND lots.date_of_completion > NOW()";
+    $stmt = db_get_prepare_stmt($link, $sql, [$search]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    return $result;
+}
+
+/**
+ * Функция выполняет подготовленный запрос к бд на получение количества лотов,
+ * которые соответствуют написанному в поисковой строке
+ * @param $link mysqli Ресурс соединения
+ * @param $search - Искомое значение
+ * @param $page_items - количество лотов на страницу
+ * @param $offset - смещение
+ * @return false|mysqli_result - объект mysqli_stmt_get_result
+ */
+function get_lots_by_search($link, $search, $page_items, $offset)
+{
+    $sql_search = "SELECT lots.id, lots.title, lots.starting_price, lots.image, lots.date_of_completion, category.title as category FROM lots "
+        . "JOIN category ON lots.category_id = category.id "
+        . "WHERE MATCH(lots.title, description) AGAINST(?) AND lots.date_of_completion > NOW() "
+        . "ORDER BY lots.date_create DESC LIMIT " . $page_items . " OFFSET " . $offset;
+    $stmt = db_get_prepare_stmt($link, $sql_search, [$search]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    return $result;
+}
+
+/**
+ * Функция выполняет запрос в бд на добавление нового пользователя с указанными данными
+ * @param $link mysqli Ресурс соединения
+ * @param $form - заполнение значений из формы
+ * @param $password - пароль пользователя
+ * @return bool - возврат результата
+ */
+function insert_user($link, $form, $password)
+{
+    $sql = 'INSERT INTO users (date_of_registration, email, name, password, contacts) VALUES (NOW(), ?, ?, ?, ?)';
+    $stmt = db_get_prepare_stmt($link, $sql, [$form['email'], $form['name'], $password, $form['contacts']]);
+    $result = mysqli_stmt_execute($stmt);
+
+    return $result;
+}
+
+/**
+ * Функция выполняет подготовленный запрос к бд на список ставок
+ * залогиненного пользователя
+ * @param $link mysqli Ресурс соединения
+ * @param $user_id - Экранированное значение ID залогиненного пользователя
+ * @return false|mysqli_result - возврат результата
+ */
+function get_user_bets($link, $user_id)
+{
+    $sql = "SELECT rates.date_starting_rate, rates.price, rates.is_winner, rates.lot_id, lots.title AS lot_name, lots.image AS lot_img, lots.date_of_completion, category.title AS lot_category, (SELECT users.contacts FROM users WHERE users.id = lots.user_id) AS contacts FROM rates
+LEFT JOIN lots
+ON rates.lot_id = lots.id
+LEFT JOIN category 
+ON lots.category_id = category.id
+LEFT JOIN users 
+ON rates.user_id = users.id
+WHERE rates.user_id = ?
+ORDER BY rates.id DESC";
+    $stmt = db_get_prepare_stmt($link, $sql, [$user_id]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    return $result;
+}

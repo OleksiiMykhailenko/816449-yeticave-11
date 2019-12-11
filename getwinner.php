@@ -1,6 +1,6 @@
 <?php
 
-require_once ('./vendor/autoload.php');
+require_once('./vendor/autoload.php');
 require_once('helpers.php');
 require_once('functions/common.php');
 require_once('init.php');
@@ -17,7 +17,6 @@ $open_lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 foreach ($open_lots as $lot) {
     $sql_winner = "SELECT rates.user_id, users.name, users.email FROM rates JOIN users ON rates.user_id = users.id WHERE rates.lot_id = " . $lot['id'] . " ORDER BY rates.date_starting_rate DESC LIMIT 1";
-
     $result_winner = mysqli_query($link, $sql_winner);
 
     if (!$result_winner) {
