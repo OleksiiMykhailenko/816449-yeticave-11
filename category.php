@@ -15,6 +15,7 @@ $category = get_category_by_id($link, $category_id);
 
 if (null === $category) {
     http_response_code(404);
+
     $page_content = include_template('404.php');
     $page_title = '404 Страница не найдена';
 } else {
@@ -32,23 +33,23 @@ if (null === $category) {
 
     list($prev_page_link, $next_page_link) = get_navigation_links($url, $cur_page, $pages_count);
 
-    $page_content = include_template('category.php', ['categories' => $categories,
-        'category_name' => $category['title'],
-        'lots' => $lots,
-        'pages' => $navigation_pages,
-        'pages_count' => $pages_count,
-        'url' => $url,
-        'cur_page' => $cur_page,
-        'prev_page_link' => $prev_page_link,
-        'next_page_link' => $next_page_link
+    $page_content = include_template('category.php', ['categories'     => $categories,
+                                                      'category_name'  => $category['title'],
+                                                      'lots'           => $lots,
+                                                      'pages'          => $navigation_pages,
+                                                      'pages_count'    => $pages_count,
+                                                      'url'            => $url,
+                                                      'cur_page'       => $cur_page,
+                                                      'prev_page_link' => $prev_page_link,
+                                                      'next_page_link' => $next_page_link,
     ]);
 }
 
 $layout_content = include_template('layout.php', [
-    'content' => $page_content,
+    'content'    => $page_content,
     'categories' => $categories,
-    'title' => $page_title,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name
+    'title'      => $page_title,
+    'is_auth'    => $is_auth,
+    'user_name'  => $user_name,
 ]);
 print($layout_content);

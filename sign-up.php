@@ -60,6 +60,6 @@ $layout_content = include_template('layout.php', [
     'categories' => $categories,
     'content'    => $page_content,
     'is_auth'    => $is_auth,
-    'user_name'  => $user_name
+    'user_name'  => $user_name,
 ]);
 print($layout_content);

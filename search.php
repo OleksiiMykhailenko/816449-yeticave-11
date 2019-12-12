@@ -11,7 +11,8 @@ $lots = [];
 $search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS) ?? '';
 $search = mysqli_real_escape_string($link, $_GET['search']);
 
-if ($search) {
+if (!empty($search)) {
+    $page = (int) $page;
     $cur_page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT) ?? 1;
     $page_items = 9;
 
@@ -24,8 +25,7 @@ if ($search) {
     $offset = ($cur_page - 1) * $page_items;
     $pages = range(1, $pages_count);
 
-    $lots = mysqli_fetch_all(get_lots_by_search($link, $search, $page_items,
-        $offset), MYSQLI_ASSOC);
+    $lots = mysqli_fetch_all(get_lots_by_search($link, $search, $page_items, $offset), MYSQLI_ASSOC);
 
     if ($pages_count === 0) {
         $error = "Ничего не найдено по вашему запросу.";
@@ -37,7 +37,7 @@ if ($search) {
             'lots'        => $lots,
             'pages'       => $pages,
             'pages_count' => $pages_count,
-            'cur_page'    => $cur_page
+            'cur_page'    => $cur_page,
         ]);
     }
 }
@@ -47,6 +47,6 @@ $layout_content = include_template('layout.php', [
     'user_name'  => $user_name,
     'title'      => 'YetiCave - Результаты поиска',
     'categories' => $categories,
-    'content'    => $page_content
+    'content'    => $page_content,
 ]);
 print($layout_content);

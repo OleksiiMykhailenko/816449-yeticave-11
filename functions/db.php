@@ -39,8 +39,8 @@ function get_all_categories($link)
 function get_all_lots($link)
 {
     $sql = "SELECT lots.id, lots.title, lots.starting_price, lots.image, lots.date_of_completion, lots.bid_step, category.title as category 
-FROM lots JOIN category ON lots.category_id = category.id
-WHERE lots.date_of_completion > CURDATE() ORDER BY lots.date_create DESC";
+            FROM lots JOIN category ON lots.category_id = category.id
+            WHERE lots.date_of_completion > CURDATE() ORDER BY lots.date_create DESC";
 
     return db_fetch_data($link, $sql);
 }
@@ -158,7 +158,8 @@ function fill_lot_winners($link)
  * @param $email - Искомое значение
  * @return |null - Возврат результата в случае ненахождения
  */
-function get_user_by_email($link, $email) {
+function get_user_by_email($link, $email)
+{
     $sql = "SELECT * FROM users WHERE email = '%s'";
     $sql = sprintf($sql, $email);
 
@@ -195,8 +196,8 @@ function get_user_by_email_result($link, $email)
  * Функция ыполняет подготовленный запрос к бд на получение количества лотов,
  * которые соответствуют написанному в поисковой строке
  * @param $link mysqli Ресурс соединения
- * @param $search - искомое значение
- * @return - объект mysqli_stmt_get_result
+ * @param string $search - искомое значение
+ * @return object объект mysqli_stmt_get_result
  */
 function get_lots_count_by_search($link, $search)
 {
@@ -213,10 +214,10 @@ function get_lots_count_by_search($link, $search)
  * Функция выполняет подготовленный запрос к бд на получение количества лотов,
  * которые соответствуют написанному в поисковой строке
  * @param $link mysqli Ресурс соединения
- * @param $search - Искомое значение
- * @param $page_items - количество лотов на страницу
- * @param $offset - смещение
- * @return false|mysqli_result - объект mysqli_stmt_get_result
+ * @param string $search - Искомое значение
+ * @param int $page_items - количество лотов на страницу
+ * @param int $offset - смещение
+ * @return object false|mysqli_result - объект mysqli_stmt_get_result
  */
 function get_lots_by_search($link, $search, $page_items, $offset)
 {
@@ -234,8 +235,8 @@ function get_lots_by_search($link, $search, $page_items, $offset)
 /**
  * Функция выполняет запрос в бд на добавление нового пользователя с указанными данными
  * @param $link mysqli Ресурс соединения
- * @param $form - заполнение значений из формы
- * @param $password - пароль пользователя
+ * @param array $form - заполнение значений из формы
+ * @param string $password - пароль пользователя
  * @return bool - возврат результата
  */
 function insert_user($link, $form, $password)
@@ -251,23 +252,93 @@ function insert_user($link, $form, $password)
  * Функция выполняет подготовленный запрос к бд на список ставок
  * залогиненного пользователя
  * @param $link mysqli Ресурс соединения
- * @param $user_id - Экранированное значение ID залогиненного пользователя
- * @return false|mysqli_result - возврат результата
+ * @param string $user_id - Экранированное значение ID залогиненного пользователя
+ * @return object false|mysqli_result - возврат результата
  */
 function get_user_bets($link, $user_id)
 {
-    $sql = "SELECT rates.date_starting_rate, rates.price, rates.is_winner, rates.lot_id, lots.title AS lot_name, lots.image AS lot_img, lots.date_of_completion, category.title AS lot_category, (SELECT users.contacts FROM users WHERE users.id = lots.user_id) AS contacts FROM rates
-LEFT JOIN lots
-ON rates.lot_id = lots.id
-LEFT JOIN category 
-ON lots.category_id = category.id
-LEFT JOIN users 
-ON rates.user_id = users.id
-WHERE rates.user_id = ?
-ORDER BY rates.id DESC";
+    $sql = "SELECT rates.date_starting_rate, rates.price, rates.is_winner, rates.lot_id, lots.title AS lot_name, 
+                lots.image AS lot_img, lots.date_of_completion, category.title AS lot_category, 
+                (SELECT users.contacts FROM users WHERE users.id = lots.user_id) AS contacts FROM rates
+            LEFT JOIN lots
+            ON rates.lot_id = lots.id
+            LEFT JOIN category 
+            ON lots.category_id = category.id
+            LEFT JOIN users 
+            ON rates.user_id = users.id
+            WHERE rates.user_id = ?
+            ORDER BY rates.id DESC";
     $stmt = db_get_prepare_stmt($link, $sql, [$user_id]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
+    return $result;
+}
+
+/**
+ * Функция выполняет запрос к бд на поиск данных пользователя с заданным email
+ * @param $link mysqli Ресурс соединения
+ * @param string $email email пользователя
+ * @return $result объект mysqli_query
+ */
+function get_user_by_email_login($link, $email)
+{
+    $sql = "SELECT * FROM users WHERE email = '$email'";
+    $result = mysqli_query($link, $sql);
+
+    return $result;
+}
+
+/**
+ * Функция выполняет запрос к бд на получение страницы лота
+ * @param $link mysqli Ресурс соединения
+ * @param string $lot_id Экранированный ID лота
+ * @return bool|mysqli_result объект mysqli_result
+ */
+function get_lot($link, $lot_id)
+{
+    $sql = <<<SQL
+SELECT lots.id, lots.title, lots.starting_price, lots.image, lots.date_of_completion, lots.description, lots.bid_step, lots.user_id, category.title as category,
+CASE 
+    WHEN (SELECT MAX(price) FROM rates WHERE rates.lot_id = lots.id) > 0 THEN (SELECT MAX(price) FROM rates WHERE rates.lot_id = lots.id)
+    ELSE lots.starting_price
+END AS price
+    FROM lots JOIN category ON lots.category_id = category.id 
+    WHERE lots.id = '$lot_id';
+SQL;
+    $result = mysqli_query($link, $sql);
+
+    return $result;
+}
+
+/**
+ * Функция выполняет запрос к бд на получение ставок лота по его ID
+ * @param $link mysqli Ресурс соединения
+ * @param string $lot_id Экранированный ID лота
+ * @return bool|mysqli_result объект mysqli_result
+ */
+function get_lot_rates($link, $lot_id)
+{
+    $sql_rates = "SELECT users.name AS user, rates.price AS price, rates.date_starting_rate AS time, users.id AS user_id FROM rates 
+                  JOIN users ON rates.user_id = users.id WHERE rates.lot_id = $lot_id ORDER BY rates.date_starting_rate DESC";
+    $sql_rates_result = mysqli_query($link, $sql_rates);
+
+    return $sql_rates_result;
+}
+
+/**
+ * Функция выполняет подготовленный запрос к бд на публикацию ставки
+ * @param $link mysqli Ресурс соединения
+ * @param int $user_id ID залогиненного пользователя
+ * @param int $lot ID лота
+ * @param array $form значение ставки из формы
+ * @return bool $result объект mysqli_stmt_get_result
+ */
+function add_rate($link, $user_id, $lot, $form)
+{
+    $rate = [$user_id, $lot['id'], $form['cost']];
+    $sql = "INSERT INTO rates (date_starting_rate, user_id, lot_id, price) VALUES (NOW(), ?, ?, ?)";
+    $stmt = db_get_prepare_stmt($link, $sql, $rate);
+    $result = mysqli_stmt_execute($stmt);
 
     return $result;
 }

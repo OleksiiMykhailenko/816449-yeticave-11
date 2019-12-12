@@ -15,10 +15,10 @@ $lots = get_all_lots($link);
 $page_content = include_template('main.php', ['categories' => $categories, 'lots' => $lots]);
 
 $layout_content = include_template('layout.php', [
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
-    'title' => 'YetiCave - Главная страница',
+    'is_auth'    => $is_auth,
+    'user_name'  => $user_name,
+    'title'      => 'YetiCave - Главная страница',
     'categories' => $categories,
-    'content' => $page_content
+    'content'    => $page_content,
 ]);
 print($layout_content);

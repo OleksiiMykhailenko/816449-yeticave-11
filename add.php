@@ -17,33 +17,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'category-id' => function ($value) use ($cats_ids) {
             return validate_category($value, $cats_ids);
         },
-        'lot-name' => function ($value) {
+        'lot-name'    => function ($value) {
             return validate_length($value, 10, 200);
         },
-        'message' => function ($value) {
+        'message'     => function ($value) {
             return validate_length($value, 10, 3000);
         },
-        'lot-rate' => function ($value) {
+        'lot-rate'    => function ($value) {
             return validate_price($value);
         },
-        'lot-step' => function ($value) {
+        'lot-step'    => function ($value) {
             return validate_step($value);
         },
-        'lot-date' => function ($value) {
+        'lot-date'    => function ($value) {
             return validate_date($value);
         },
     ];
 
-    $lot = filter_input_array(INPUT_POST, ['lot-name' => FILTER_DEFAULT, 'message' => FILTER_DEFAULT,
-        'category-id' => FILTER_DEFAULT, 'lot-date' => FILTER_DEFAULT, 'lot-rate' => FILTER_DEFAULT, 'lot-step' => FILTER_DEFAULT], true);
+    $lot = filter_input_array(INPUT_POST, ['lot-name'    => FILTER_DEFAULT, 'message' => FILTER_DEFAULT,
+                                           'category-id' => FILTER_DEFAULT, 'lot-date' => FILTER_DEFAULT, 'lot-rate' => FILTER_DEFAULT, 'lot-step' => FILTER_DEFAULT], true);
 
     $fields = [
-        'lot-name' => 'Наименование',
-        'message' => 'Описание',
+        'lot-name'    => 'Наименование',
+        'message'     => 'Описание',
         'category-id' => 'Категория',
-        'lot-date' => 'Дата окончания торгов ',
-        'lot-rate' => 'Начальная цена',
-        'lot-step' => 'Шаг ставки',
+        'lot-date'    => 'Дата окончания торгов ',
+        'lot-rate'    => 'Начальная цена',
+        'lot-step'    => 'Шаг ставки',
     ];
 
     $errors = validate_post_data($lot, $rules, $required, $fields);
@@ -88,15 +88,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 if (!$is_auth) {
     http_response_code(403);
+
     $page_content = include_template('error.php', ['error' => 'Страница доступна только для авторизованных пользователей']);
     $page_title = 'YetiCave | 403';
 }
 
 $layout_content = include_template('layout.php', [
-    'is_auth' => $is_auth,
-    'user_name' => $user_name,
-    'title' => 'YetiCave - Добавление лота',
+    'is_auth'    => $is_auth,
+    'user_name'  => $user_name,
+    'title'      => 'YetiCave - Добавление лота',
     'categories' => $categories,
-    'content' => $page_content
+    'content'    => $page_content,
 ]);
 print($layout_content);

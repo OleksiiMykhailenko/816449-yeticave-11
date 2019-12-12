@@ -18,16 +18,19 @@ if ($result) {
             $date_of_completion = get_dt_range($rate['date_of_completion']);
             $rates[$key]['timer_class'] = '';
             $rates[$key]['timer_message'] = date_format(date_create($rate['date_of_completion']), 'd.m.Y в H:i');
+
             if ((int)$date_of_completion[0] === 0 && !empty($date_of_completion)) {
                 $rates[$key]['timer_class'] = 'timer--finishing';
                 $rates[$key]['timer_message'] = implode(':', $date_of_completion);
                 $rates[$key]['rate_class'] = 'rates__item';
             }
-            if (date_create("now") > date_create($rate['date_of_completion'])) {
+
+            if (date_create('now') > date_create($rate['date_of_completion'])) {
                 $rates[$key]['timer_class'] = 'timer--end';
                 $rates[$key]['timer_message'] = 'Торги окончены';
                 $rates[$key]['rate_class'] = 'rates__item--end';
             }
+
             if ($rate['is_winner']) {
                 $rates[$key]['timer_class'] = 'timer--win';
                 $rates[$key]['timer_message'] = 'Ваша ставка выиграла';
@@ -35,11 +38,11 @@ if ($result) {
             }
         }
 
-        $page_content = include_template('my-bets.php', ['categories' => $categories,
-                                                         'rates'      => $rates]);
+        $page_content = include_template('my-bets.php', ['categories' => $categories, 'rates' => $rates]);
     }
 } else {
     http_response_code(404);
+
     $page_content = include_template('404.php');
     $page_title = '404 Страница не найдена';
 }
@@ -49,6 +52,6 @@ $layout_content = include_template('layout.php', [
     'user_name'  => $user_name,
     'title'      => 'YetiCave - Мои ставки',
     'categories' => $categories,
-    'content'    => $page_content
+    'content'    => $page_content,
 ]);
 print($layout_content);
