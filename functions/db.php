@@ -128,8 +128,8 @@ function get_active_lots_by_category_id($link, $id, $limit, $offset)
 }
 
 /**
- * @param $link - Соединение с базой данных
  * Функция выполнения запроса на получение id всех лотов, у которых дата окончания лота < текущей, а также поле is_closed = 0
+ * @param $link - Соединение с базой данных
  * Обработка данного запроса
  * Получение массива
  * Выполнение запроса обновления поля is_winner в таблице ставок, установка значения 1, с условием предыдущего запроса
@@ -144,8 +144,10 @@ function fill_lot_winners($link)
 
     foreach ($lots as $key => $value) {
         $id = $value['id'];
-        $sql_winner_update = "UPDATE rates SET rates.is_winner = 1 WHERE rates.lot_id = '$id' ORDER BY rates.price DESC LIMIT 1";
-        mysqli_query($link, $sql_winner_update);
+        $sql_winner_update = "UPDATE rates SET rates.is_winner = 1 WHERE rates.lot_id = ? ORDER BY rates.price DESC LIMIT 1";
+        $stmt = db_get_prepare_stmt($link, $sql_winner_update, [$id]);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_get_result($stmt);
     }
 
     $sql_lots_update = "UPDATE lots SET lots.is_closed = 1 WHERE lots.date_of_completion <= CURDATE() AND lots.is_closed = 0";
@@ -178,7 +180,7 @@ function get_user_by_email($link, $email)
  * Функция нахождения емайл, в случае совпадения по емайл - возврат нулевого результата
  * @param $link - Соединение с базой данных
  * @param $email - Искомое значение
- * @return |null - Возврат результата в случае нахождения
+ * @return |null Возврат результата в случае ненахождения
  */
 function get_user_by_email_result($link, $email)
 {
@@ -197,7 +199,7 @@ function get_user_by_email_result($link, $email)
  * которые соответствуют написанному в поисковой строке
  * @param $link mysqli Ресурс соединения
  * @param string $search - искомое значение
- * @return object объект mysqli_stmt_get_result
+ * @return false|mysqli_result объект mysqli_result
  */
 function get_lots_count_by_search($link, $search)
 {
@@ -217,7 +219,7 @@ function get_lots_count_by_search($link, $search)
  * @param string $search - Искомое значение
  * @param int $page_items - количество лотов на страницу
  * @param int $offset - смещение
- * @return object false|mysqli_result - объект mysqli_stmt_get_result
+ * @return false|mysqli_result объект mysqli_result
  */
 function get_lots_by_search($link, $search, $page_items, $offset)
 {
@@ -237,7 +239,7 @@ function get_lots_by_search($link, $search, $page_items, $offset)
  * @param $link mysqli Ресурс соединения
  * @param array $form - заполнение значений из формы
  * @param string $password - пароль пользователя
- * @return bool - возврат результата
+ * @return bool объект mysqli_result
  */
 function insert_user($link, $form, $password)
 {
@@ -253,7 +255,7 @@ function insert_user($link, $form, $password)
  * залогиненного пользователя
  * @param $link mysqli Ресурс соединения
  * @param string $user_id - Экранированное значение ID залогиненного пользователя
- * @return object false|mysqli_result - возврат результата
+ * @return false|mysqli_result объект mysqli_result
  */
 function get_user_bets($link, $user_id)
 {
@@ -271,6 +273,7 @@ function get_user_bets($link, $user_id)
     $stmt = db_get_prepare_stmt($link, $sql, [$user_id]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
+
     return $result;
 }
 
@@ -278,12 +281,14 @@ function get_user_bets($link, $user_id)
  * Функция выполняет запрос к бд на поиск данных пользователя с заданным email
  * @param $link mysqli Ресурс соединения
  * @param string $email email пользователя
- * @return $result объект mysqli_query
+ * @return bool|mysqli_result объект mysqli_result
  */
 function get_user_by_email_login($link, $email)
 {
-    $sql = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($link, $sql);
+    $sql = "SELECT * FROM users WHERE email = ?";
+    $stmt = db_get_prepare_stmt($link, $sql, [$email]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
     return $result;
 }
@@ -303,9 +308,11 @@ CASE
     ELSE lots.starting_price
 END AS price
     FROM lots JOIN category ON lots.category_id = category.id 
-    WHERE lots.id = '$lot_id';
+    WHERE lots.id = ?;
 SQL;
-    $result = mysqli_query($link, $sql);
+    $stmt = db_get_prepare_stmt($link, $sql, [$lot_id]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
     return $result;
 }
@@ -319,8 +326,10 @@ SQL;
 function get_lot_rates($link, $lot_id)
 {
     $sql_rates = "SELECT users.name AS user, rates.price AS price, rates.date_starting_rate AS time, users.id AS user_id FROM rates 
-                  JOIN users ON rates.user_id = users.id WHERE rates.lot_id = $lot_id ORDER BY rates.date_starting_rate DESC";
-    $sql_rates_result = mysqli_query($link, $sql_rates);
+                  JOIN users ON rates.user_id = users.id WHERE rates.lot_id = ? ORDER BY rates.date_starting_rate DESC";
+    $stmt = db_get_prepare_stmt($link, $sql_rates, [$lot_id]);
+    mysqli_stmt_execute($stmt);
+    $sql_rates_result = mysqli_stmt_get_result($stmt);
 
     return $sql_rates_result;
 }
@@ -331,7 +340,7 @@ function get_lot_rates($link, $lot_id)
  * @param int $user_id ID залогиненного пользователя
  * @param int $lot ID лота
  * @param array $form значение ставки из формы
- * @return bool $result объект mysqli_stmt_get_result
+ * @return bool|mysqli_result объект mysqli_result
  */
 function add_rate($link, $user_id, $lot, $form)
 {
@@ -341,4 +350,64 @@ function add_rate($link, $user_id, $lot, $form)
     $result = mysqli_stmt_execute($stmt);
 
     return $result;
+}
+
+/**
+ * Функция выполняет подготовленный запрос к бд на публикацию лота
+ * @param $link mysqli Ресурс соединения
+ * @param array $lot массив из полей формы
+ * @return bool|mysqli_result объект mysqli_result
+ */
+function add_lot($link, $lot)
+{
+    $sql = 'INSERT INTO lots (date_create, title, description, category_id, date_of_completion, starting_price, bid_step, image, user_id) 
+                VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)';
+    $stmt = db_get_prepare_stmt($link, $sql, $lot);
+    $result = mysqli_stmt_execute($stmt);
+
+    return $result;
+}
+
+/**
+ * Функция получения лотов, у которых вышло время публикации
+ * @param $link mysqli Ресурс соединения
+ * @return bool|mysqli_result объект mysqli_result
+ */
+function get_closed_lots($link)
+{
+    $sql_open_lots = "SELECT lots.id, lots.title FROM lots WHERE lots.date_of_completion <= CURDATE() AND lots.is_closed = 1";
+    $result = mysqli_query($link, $sql_open_lots);
+
+    return $result;
+}
+
+/**
+ * Функция выборки ставок по ID лота
+ * @param $link mysqli Ресурс соединения
+ * @param int $lot ID лота
+ * @return false|mysqli_result объект mysqli_result
+ */
+function get_rates_winner($link, $lot)
+{
+    $sql_winner = "SELECT rates.user_id, users.name, users.email FROM rates JOIN users ON rates.user_id = users.id WHERE rates.lot_id = ? ORDER BY rates.date_starting_rate DESC LIMIT 1";
+    $stmt = db_get_prepare_stmt($link, $sql_winner, [$lot['id']]);
+    mysqli_stmt_execute($stmt);
+    $result_winner = mysqli_stmt_get_result($stmt);
+
+    return $result_winner;
+}
+
+/**
+ * Функция обновления поля победителя, установка значения
+ * @param $link mysqli Ресурс соединения
+ * @param int $winner ID победителя
+ * @param int $lot ID лота
+ * @return bool|mysqli_result объект mysqli_result
+ */
+function lot_winners($link, $winner, $lot)
+{
+    $sql = 'UPDATE lots SET winner_id = ' . $winner[0]['user_id'] . ' WHERE lots.id = ' . $lot['id'];
+    $set_winner = mysqli_query($link, $sql);
+
+    return $set_winner;
 }

@@ -35,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     $lot = filter_input_array(INPUT_POST, ['lot-name'    => FILTER_DEFAULT, 'message' => FILTER_DEFAULT,
-                                           'category-id' => FILTER_DEFAULT, 'lot-date' => FILTER_DEFAULT, 'lot-rate' => FILTER_DEFAULT, 'lot-step' => FILTER_DEFAULT], true);
+                                           'category-id' => FILTER_DEFAULT, 'lot-date' => FILTER_DEFAULT,
+                                           'lot-rate'    => FILTER_DEFAULT, 'lot-step' => FILTER_DEFAULT], true);
 
     $fields = [
         'lot-name'    => 'Наименование',
@@ -71,12 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
     } else {
         $lot['user_id'] = $_SESSION['user']['id'];
-        $sql = 'INSERT INTO lots (date_create, title, description, category_id, date_of_completion, starting_price, bid_step, image, user_id) 
-                VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)';
-        $stmt = db_get_prepare_stmt($link, $sql, $lot);
-        $res = mysqli_stmt_execute($stmt);
+        $result = add_lot($link, $lot);
 
-        if ($res) {
+        if ($result) {
             $lot_id = mysqli_insert_id($link);
 
             header("Location: lot.php?id=" . $lot_id);

@@ -8,12 +8,11 @@ require_once('data.php');
 $categories = get_all_categories($link);
 
 $lots = [];
-$search = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_SPECIAL_CHARS) ?? '';
+$search = (string)filter_input(INPUT_GET, 'search') ?? '';
 $search = mysqli_real_escape_string($link, $_GET['search']);
 
 if (!empty($search)) {
-    $page = (int) $page;
-    $cur_page = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT) ?? 1;
+    $cur_page = filter_input(INPUT_GET, 'page') ?? 1;
     $page_items = 9;
 
     $items_count = mysqli_fetch_assoc(get_lots_count_by_search($link, $search))['cnt'];

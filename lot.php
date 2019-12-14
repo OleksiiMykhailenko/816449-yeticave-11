@@ -7,8 +7,7 @@ require_once('data.php');
 
 $categories = get_all_categories($link);
 
-$lot_id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
-$lot_id = mysqli_real_escape_string($link, $lot_id);
+$lot_id = (int) filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $lots = mysqli_fetch_all(get_lot($link, $lot_id), MYSQLI_ASSOC);
 $result = get_lot($link, $lot_id);
 
