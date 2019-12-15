@@ -219,15 +219,15 @@ function get_lots_count_by_search($link, $search)
  * @param string $search - Искомое значение
  * @param int $page_items - количество лотов на страницу
  * @param int $offset - смещение
- * @return false|mysqli_result объект mysqli_result
+ * @return false|mysqli_result
  */
 function get_lots_by_search($link, $search, $page_items, $offset)
 {
     $sql_search = "SELECT lots.id, lots.title, lots.starting_price, lots.image, lots.date_of_completion, category.title as category FROM lots "
         . "JOIN category ON lots.category_id = category.id "
         . "WHERE MATCH(lots.title, description) AGAINST(?) AND lots.date_of_completion > NOW() "
-        . "ORDER BY lots.date_create DESC LIMIT " . $page_items . " OFFSET " . $offset;
-    $stmt = db_get_prepare_stmt($link, $sql_search, [$search]);
+        . "ORDER BY lots.date_create DESC LIMIT ? OFFSET ?";
+    $stmt = db_get_prepare_stmt($link, $sql_search, [$search, $page_items, $offset]);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
@@ -400,7 +400,7 @@ function get_rates_winner($link, $lot)
 /**
  * Функция обновления поля победителя, установка значения
  * @param $link mysqli Ресурс соединения
- * @param int $winner ID победителя
+ * @param array $winner ID победителя
  * @param int $lot ID лота
  * @return bool|mysqli_result объект mysqli_result
  */
