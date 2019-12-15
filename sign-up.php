@@ -20,9 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     ];
 
     $fields = [
-        'email' => 'E-mail',
+        'email'    => 'E-mail',
         'password' => 'Пароль',
-        'name' => 'Имя',
+        'name'     => 'Имя',
         'contacts' => 'Контактные данные',
     ];
 
@@ -35,19 +35,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (is_null($email)) {
             $password = password_hash($form['password'], PASSWORD_DEFAULT);
-            $sql_sign = 'INSERT INTO users (date_of_registration, email, name, password, contacts) VALUES (NOW(), ?, ?, ?, ?)';
-            $stmt = db_get_prepare_stmt($link, $sql_sign, [$form['email'], $form['name'], $password, $form['contacts']]);
-            $res = mysqli_stmt_execute($stmt);
+            $res = insert_user($link, $form, $password);
         } else {
             $errors['email'] = 'Пользователь с этим email уже зарегистрирован';
         }
     }
 
-    if (null !== $res && empty($errors)) {
+    if (!empty($res) && empty($errors)) {
         header("Location: login.php");
         exit();
     }
-
 }
 
 $page_content = include_template('sign-up.php', ['categories' => $categories, 'errors' => $errors,]);
@@ -59,10 +56,10 @@ if ($is_auth) {
 }
 
 $layout_content = include_template('layout.php', [
-    'title' => 'YetiCave | Регистрация',
+    'title'      => 'YetiCave | Регистрация',
     'categories' => $categories,
-    'content' => $page_content,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name
+    'content'    => $page_content,
+    'is_auth'    => $is_auth,
+    'user_name'  => $user_name,
 ]);
 print($layout_content);

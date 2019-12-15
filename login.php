@@ -23,12 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
     $email = mysqli_real_escape_string($link, $form['email']);
-    $sql = "SELECT * FROM users WHERE email = '$email'";
-    $result = mysqli_query($link, $sql);
+    $result = get_user_by_email_login($link, $email);
     $user = $result ? mysqli_fetch_array($result, MYSQLI_ASSOC) : null;
 
     if (!count($errors) && $user) {
-
         if (password_verify($form['password'], $user['password'])) {
             $_SESSION['user'] = $user;
         } else {
@@ -54,10 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $layout_content = include_template('layout.php', [
-    'title' => 'YetiCave',
+    'title'      => 'YetiCave',
     'categories' => $categories,
-    'content' => $page_content,
-    'is_auth' => $is_auth,
-    'user_name' => $user_name
+    'content'    => $page_content,
+    'is_auth'    => $is_auth,
+    'user_name'  => $user_name,
 ]);
 print($layout_content);
