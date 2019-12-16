@@ -12,10 +12,11 @@ $search = (string)filter_input(INPUT_GET, 'search') ?? '';
 $search = mysqli_real_escape_string($link, $_GET['search']);
 
 if (!empty($search)) {
-    $cur_page = filter_input(INPUT_GET, 'page') ?? 1;
+    $cur_page = (int)(filter_input(INPUT_GET, 'page') ?? 1);
     $page_items = 9;
 
-    $items_count = mysqli_fetch_assoc(get_lots_count_by_search($link, $search))['cnt'];
+    $items_count = mysqli_fetch_assoc(get_lots_count_by_search($link, $search));
+    $items_count = $items_count['cnt'] ?? 0;
 
     if ($page_items > 0) {
         $pages_count = ceil($items_count / $page_items);

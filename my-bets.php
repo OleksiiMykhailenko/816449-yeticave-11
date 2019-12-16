@@ -15,7 +15,9 @@ if ($result) {
         $rates = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         foreach ($rates as $key => $rate) {
-            $date_of_completion = get_dt_range($rate['date_of_completion']);
+            if (isset($rate['date_of_completion'])) {
+                $date_of_completion = get_dt_range($rate['date_of_completion']);
+            }
             $rates[$key]['timer_class'] = '';
             $rates[$key]['timer_message'] = date_format(date_create($rate['date_of_completion']), 'd.m.Y в H:i');
 

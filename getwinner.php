@@ -9,15 +9,18 @@ require_once('data.php');
 $result = get_closed_lots($link);
 
 if (!$result) {
-    die(mysqli_error($link));
+    $error = "Не удалось соединится с базой данных";
+    $page_content = include_template('error.php', ['error' => $error]);
 }
+
 $open_lots = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 foreach ($open_lots as $lot) {
     $result_winner = get_rates_winner($link, $lot);
 
     if (!$result_winner) {
-        die(mysqli_error($link));
+        $error = "Не удалось соединится с базой данных";
+        $page_content = include_template('error.php', ['error' => $error]);
     }
 
     if (mysqli_num_rows($result_winner)) {
