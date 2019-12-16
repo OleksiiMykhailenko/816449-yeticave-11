@@ -5,8 +5,8 @@ session_start();
 $link = connect_to_db();
 
 if (false === $link) {
-    $error = mysqli_error($link);
-    echo "MySQL Error: " . $error;
+    $error = "Не удалось соединится с базой данных";
+    $page_content = include_template('error.php', ['error' => $error]);
 } else {
     mysqli_set_charset($link, "utf8");
 }

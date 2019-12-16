@@ -17,13 +17,17 @@ function connect_to_db()
 function db_fetch_data($link, $sql)
 {
     $result = mysqli_query($link, $sql);
+
     if ($result) {
         $result = mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
+
     return $result;
 }
 
 /**
+ * Функция выполнения запроса на получение всех категорий
+ * @param $link - соединение с базой данных
  * @return array|bool|mysqli_result - выполнение запроса на получение всех категорий, обработка запроса
  */
 function get_all_categories($link)
@@ -34,6 +38,8 @@ function get_all_categories($link)
 }
 
 /**
+ * Функция выполнение запроса на получение всех лотов
+ * @param $link - соединение с базой данных
  * @return array|bool|mysqli_result - выполнение запроса на получение всех лотов, обработка запроса
  */
 function get_all_lots($link)
@@ -50,7 +56,7 @@ function get_all_lots($link)
  * @param $link - Соединение с базой данных
  * @param $id - Получение по id конкретного лота
  * Обработка запроса
- * @return |null Возврат значения null если значение из запроса не было получено
+ * @return array|null Возврат результата в случае ненахождения
  */
 function get_category_by_id($link, $id)
 {
@@ -158,7 +164,7 @@ function fill_lot_winners($link)
  * Функция поиска емейл в базе данных
  * @param $link - Соединение с базой данных
  * @param $email - Искомое значение
- * @return |null - Возврат результата в случае ненахождения
+ * @return array|null Возврат результата в случае ненахождения
  */
 function get_user_by_email($link, $email)
 {
@@ -169,7 +175,7 @@ function get_user_by_email($link, $email)
 
     if ($result) {
         if (mysqli_num_rows($result)) {
-            return mysqli_fetch_all($result, MYSQLI_ASSOC)[0];
+            return (mysqli_fetch_array($result, MYSQLI_ASSOC));
         }
     }
 
@@ -180,7 +186,7 @@ function get_user_by_email($link, $email)
  * Функция нахождения емайл, в случае совпадения по емайл - возврат нулевого результата
  * @param $link - Соединение с базой данных
  * @param $email - Искомое значение
- * @return |null Возврат результата в случае ненахождения
+ * @return array|null Возврат результата в случае ненахождения
  */
 function get_user_by_email_result($link, $email)
 {

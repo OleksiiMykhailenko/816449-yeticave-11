@@ -51,6 +51,7 @@ $page_content = include_template('sign-up.php', ['categories' => $categories, 'e
 
 if ($is_auth) {
     http_response_code(403);
+
     $page_content = include_template('error.php', ['error' => 'Вы уже зарегестрированы']);
     $page_title = 'YetiCave | 403';
 }

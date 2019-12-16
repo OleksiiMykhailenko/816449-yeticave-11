@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['email'] = 'Такой пользователь не найден';
     }
 
-    if (count($errors)) {
+    if (count($errors) > 0) {
         $page_content = include_template('login.php', ['form' => $form, 'errors' => $errors]);
     } else {
         header("Location: /index.php");

@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = array_filter($errors);
 
     if (!empty($_FILES['lot-img']['name'])) {
-        $tmp_name = $_FILES['lot-img']['tmp_name'];
+        $tmp_name = $_FILES['lot-img']['tmp_name'] ?? 0;
         $path = $_FILES['lot-img']['name'];
         $filename = uniqid() . '.jpg';
 
@@ -68,10 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors['file'] = 'Вы не загрузили файл';
     }
 
-    if (count($errors)) {
+    if (count($errors) > 0) {
         $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
     } else {
-        $lot['user_id'] = $_SESSION['user']['id'];
+        $lot['user_id'] = $_SESSION['user']['id'] ?? 0;
         $result = add_lot($link, $lot);
 
         if ($result) {

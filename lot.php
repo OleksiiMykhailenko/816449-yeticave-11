@@ -20,15 +20,17 @@ if ($result) {
         $page_title = '404 Страница не найдена';
     } else {
         $lot = mysqli_fetch_all($result, MYSQLI_ASSOC)[0];
-        $min_price = $lot['starting_price'];
-        $step = $lot['bid_step'];
+        $min_price = $lot['starting_price'] ?? 0;
+        $step = $lot['bid_step'] ?? 0;
         $rates = [];
 
         $sql_rates_result = get_lot_rates($link, $lot_id);
 
         if ($sql_rates_result && mysqli_num_rows($sql_rates_result)) {
             $rates = mysqli_fetch_all($sql_rates_result, MYSQLI_ASSOC);
-            $last_bet_added_by_current_user = ($rates[0]['user_id'] === $user_id);
+            if (isset($rates[0]['user_id'])) {
+                $last_bet_added_by_current_user = ($rates[0]['user_id'] === $user_id);
+            }
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && $is_auth) {
@@ -52,8 +54,12 @@ if ($result) {
             }
         }
 
-        $lot_is_open = (date_create($lot['date_of_completion']) > date_create('now'));
-        $lot_of_current_user = ($lot['user_id'] === $user_id);
+        if (isset($lot['date_of_completion'])) {
+            $lot_is_open = (date_create($lot['date_of_completion']) > date_create('now'));
+        }
+        if (isset($lot['user_id'])) {
+            $lot_of_current_user = ($lot['user_id'] === $user_id);
+        }
         $show_rate_block = ($is_auth && $lot_is_open && !$lot_of_current_user && !$last_bet_added_by_current_user);
 
         $page_content = include_template('lot.php', ['categories'      => $categories,
