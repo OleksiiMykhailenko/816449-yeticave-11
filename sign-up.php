@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    if (!empty($res) && empty($errors)) {
+    if ($res && empty($errors)) {
         header("Location: login.php");
         exit();
     }

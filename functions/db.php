@@ -164,7 +164,7 @@ function fill_lot_winners($link)
  * Функция поиска емейл в базе данных
  * @param $link - Соединение с базой данных
  * @param $email - Искомое значение
- * @return array|null Возврат результата в случае ненахождения
+ * @return |null Возврат результата в случае ненахождения
  */
 function get_user_by_email($link, $email)
 {
@@ -175,7 +175,7 @@ function get_user_by_email($link, $email)
 
     if ($result) {
         if (mysqli_num_rows($result)) {
-            return (mysqli_fetch_array($result, MYSQLI_ASSOC));
+            return mysqli_fetch_all($result, MYSQLI_ASSOC)[0];
         }
     }
 
@@ -186,7 +186,7 @@ function get_user_by_email($link, $email)
  * Функция нахождения емайл, в случае совпадения по емайл - возврат нулевого результата
  * @param $link - Соединение с базой данных
  * @param $email - Искомое значение
- * @return array|null Возврат результата в случае ненахождения
+ * @return |null Возврат результата в случае ненахождения
  */
 function get_user_by_email_result($link, $email)
 {
@@ -243,8 +243,8 @@ function get_lots_by_search($link, $search, $page_items, $offset)
 /**
  * Функция выполняет запрос в бд на добавление нового пользователя с указанными данными
  * @param $link mysqli Ресурс соединения
- * @param array $form - заполнение значений из формы
- * @param string $password - пароль пользователя
+ * @param array $form заполнение значений из формы
+ * @param string $password пароль пользователя
  * @return bool объект mysqli_result
  */
 function insert_user($link, $form, $password)
