@@ -144,7 +144,7 @@ function get_active_lots_by_category_id($link, $id, $limit, $offset)
  */
 function fill_lot_winners($link)
 {
-    $sql = "SELECT lots.id FROM lots WHERE lots.date_of_completion <= CURDATE() AND lots.is_closed = 0";
+    $sql = "SELECT lots.id, lots.title FROM lots WHERE lots.date_of_completion <= CURDATE() AND lots.is_closed = 0";
     $lots = mysqli_query($link, $sql);
     $lots = mysqli_fetch_all($lots, MYSQLI_ASSOC);
 
@@ -156,9 +156,9 @@ function fill_lot_winners($link)
         mysqli_stmt_get_result($stmt);
 
         $result_winner = get_rates_winner($link, $lot);
-
         if (mysqli_num_rows($result_winner)) {
             $winner = mysqli_fetch_array($result_winner, MYSQLI_ASSOC);
+            lot_winners($link, $winner, $lot);
             send_email_to_winner($winner, $lot);
         }
     }
@@ -382,19 +382,6 @@ function add_lot($link, $lot)
 }
 
 /**
- * Функция получения лотов, у которых вышло время публикации
- * @param $link mysqli Ресурс соединения
- * @return bool|mysqli_result объект mysqli_result
- */
-function get_closed_lots($link)
-{
-    $sql_open_lots = "SELECT lots.id, lots.title FROM lots WHERE lots.date_of_completion <= CURDATE() AND lots.is_closed = 1";
-    $result = mysqli_query($link, $sql_open_lots);
-
-    return $result;
-}
-
-/**
  * Функция выборки ставок по ID лота
  * @param $link mysqli Ресурс соединения
  * @param int $lot ID лота
@@ -419,8 +406,10 @@ function get_rates_winner($link, $lot)
  */
 function lot_winners($link, $winner, $lot)
 {
-    $sql = 'UPDATE lots SET winner_id = ' . $winner['user_id'] . ' WHERE lots.id = ' . $lot['id'];
-    $set_winner = mysqli_query($link, $sql);
+    $sql = 'UPDATE lots SET winner_id = ? WHERE lots.id = ?';
+    $stmt = db_get_prepare_stmt($link, $sql, [$winner['user_id'], $lot['id']]);
+    mysqli_stmt_execute($stmt);
+    $set_winner = mysqli_stmt_get_result($stmt);
 
     return $set_winner;
 }

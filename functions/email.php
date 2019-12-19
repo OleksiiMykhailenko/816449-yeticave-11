@@ -8,9 +8,9 @@ function send_email_to_winner($winner, $lot)
     $transport->setUsername('keks@phpdemo.ru');
     $transport->setPassword('htmlacademy');
     $message = new Swift_Message('Ваша ставка победила');
-    $message->setTo([$winner[0]['email'] => $winner[0]['name']]);
+    $message->setTo([$winner['email'] => $winner['name']]);
     $message->setBody(include_template('email.php', [
-        'user_name' => $winner[0]['name'],
+        'user_name' => $winner['name'],
         'lot_id'    => $lot['id'],
         'lot_title' => $lot['title'],
         'host'      => $_SERVER['HTTP_HOST'],

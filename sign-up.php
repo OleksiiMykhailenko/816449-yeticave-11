@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return validate_email($value);
         },
         'name'     => function ($value) {
-            return validate_length($value, 10, 45);
+            return validate_length($value, 4, 45);
         },
         'contacts' => function ($value) {
             return validate_length($value, 10, 128);
