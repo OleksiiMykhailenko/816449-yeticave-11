@@ -18,10 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return validate_category($value, $cats_ids);
         },
         'lot-name'    => function ($value) {
-            return validate_length($value, 10, 200);
+            return validate_length($value, 10, 128);
         },
         'message'     => function ($value) {
-            return validate_length($value, 10, 3000);
+            return validate_length($value, 10, 500);
         },
         'lot-rate'    => function ($value) {
             return validate_price($value);
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors = array_filter($errors);
 
     if (!empty($_FILES['lot-img']['name'])) {
-        $tmp_name = $_FILES['lot-img']['tmp_name'];
+        $tmp_name = $_FILES['lot-img']['tmp_name'] ?? 0;
         $path = $_FILES['lot-img']['name'];
         $filename = uniqid() . '.jpg';
 
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (count($errors) > 0) {
         $page_content = include_template('add.php', ['lot' => $lot, 'errors' => $errors, 'categories' => $categories]);
     } else {
-        $lot['user_id'] = $_SESSION['user']['id'];
+        $lot['user_id'] = $_SESSION['user']['id'] ?? 0;
         $result = add_lot($link, $lot);
 
         if ($result) {

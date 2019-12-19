@@ -148,12 +148,19 @@ function fill_lot_winners($link)
     $lots = mysqli_query($link, $sql);
     $lots = mysqli_fetch_all($lots, MYSQLI_ASSOC);
 
-    foreach ($lots as $key => $value) {
-        $id = $value['id'];
+    foreach ($lots as $key => $lot) {
+        $id = $lot['id'];
         $sql_winner_update = "UPDATE rates SET rates.is_winner = 1 WHERE rates.lot_id = ? ORDER BY rates.price DESC LIMIT 1";
         $stmt = db_get_prepare_stmt($link, $sql_winner_update, [$id]);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_get_result($stmt);
+
+        $result_winner = get_rates_winner($link, $lot);
+
+        if (mysqli_num_rows($result_winner)) {
+            $winner = mysqli_fetch_array($result_winner, MYSQLI_ASSOC);
+            send_email_to_winner($winner, $lot);
+        }
     }
 
     $sql_lots_update = "UPDATE lots SET lots.is_closed = 1 WHERE lots.date_of_completion <= CURDATE() AND lots.is_closed = 0";
@@ -164,7 +171,7 @@ function fill_lot_winners($link)
  * Функция поиска емейл в базе данных
  * @param $link - Соединение с базой данных
  * @param $email - Искомое значение
- * @return |null Возврат результата в случае ненахождения
+ * @return array|null Возврат результата в случае ненахождения
  */
 function get_user_by_email($link, $email)
 {
@@ -186,7 +193,7 @@ function get_user_by_email($link, $email)
  * Функция нахождения емайл, в случае совпадения по емайл - возврат нулевого результата
  * @param $link - Соединение с базой данных
  * @param $email - Искомое значение
- * @return |null Возврат результата в случае ненахождения
+ * @return array|null
  */
 function get_user_by_email_result($link, $email)
 {
@@ -395,7 +402,7 @@ function get_closed_lots($link)
  */
 function get_rates_winner($link, $lot)
 {
-    $sql_winner = "SELECT rates.user_id, users.name, users.email FROM rates JOIN users ON rates.user_id = users.id WHERE rates.lot_id = ? ORDER BY rates.date_starting_rate DESC LIMIT 1";
+    $sql_winner = "SELECT rates.user_id, users.name, users.email FROM rates JOIN users ON rates.user_id = users.id WHERE rates.lot_id = ? AND rates.is_winner = 1";
     $stmt = db_get_prepare_stmt($link, $sql_winner, [$lot['id']]);
     mysqli_stmt_execute($stmt);
     $result_winner = mysqli_stmt_get_result($stmt);
@@ -408,11 +415,11 @@ function get_rates_winner($link, $lot)
  * @param $link mysqli Ресурс соединения
  * @param array $winner ID победителя
  * @param int $lot ID лота
- * @return bool|mysqli_result объект mysqli_result
+ * @return bool
  */
 function lot_winners($link, $winner, $lot)
 {
-    $sql = 'UPDATE lots SET winner_id = ' . $winner[0]['user_id'] . ' WHERE lots.id = ' . $lot['id'];
+    $sql = 'UPDATE lots SET winner_id = ' . $winner['user_id'] . ' WHERE lots.id = ' . $lot['id'];
     $set_winner = mysqli_query($link, $sql);
 
     return $set_winner;

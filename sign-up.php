@@ -14,9 +14,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $required = ['email', 'password', 'name', 'contacts'];
 
     $rules = [
-        'email' => function ($value) {
+        'email'    => function ($value) {
             return validate_email($value);
-        }
+        },
+        'name'     => function ($value) {
+            return validate_length($value, 10, 45);
+        },
+        'contacts' => function ($value) {
+            return validate_length($value, 10, 128);
+        },
     ];
 
     $fields = [
