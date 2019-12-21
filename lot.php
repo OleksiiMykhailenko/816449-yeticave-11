@@ -6,6 +6,7 @@ require_once('init.php');
 require_once('data.php');
 
 $categories = get_all_categories($link);
+$errors = [];
 
 $lot_id = (int) filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $lots = mysqli_fetch_all(get_lot($link, $lot_id), MYSQLI_ASSOC);
@@ -20,11 +21,13 @@ if ($result) {
         $page_title = '404 Страница не найдена';
     } else {
         $lot = mysqli_fetch_all($result, MYSQLI_ASSOC)[0];
+        $page_title = 'YetiCave - ' . ($lot['title'] ?? '');
         $min_price = $lot['starting_price'] ?? 0;
         $step = $lot['bid_step'] ?? 0;
         $rates = [];
 
         $sql_rates_result = get_lot_rates($link, $lot_id);
+        $last_bet_added_by_current_user= [];
 
         if ($sql_rates_result && mysqli_num_rows($sql_rates_result)) {
             $rates = mysqli_fetch_all($sql_rates_result, MYSQLI_ASSOC);
@@ -57,6 +60,7 @@ if ($result) {
         if (isset($lot['date_of_completion'])) {
             $lot_is_open = (date_create($lot['date_of_completion']) > date_create('now'));
         }
+
         if (isset($lot['user_id'])) {
             $lot_of_current_user = ($lot['user_id'] === $user_id);
         }

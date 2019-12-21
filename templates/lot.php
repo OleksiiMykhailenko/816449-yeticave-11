@@ -12,7 +12,7 @@
         <div class="lot-item__right">
                 <div class="lot-item__state">
                     <div
-                        class="lot__timer timer <?php echo (int) $time_report['hours'] === '00' ? 'timer--finishing' : ''; ?>">
+                        class="lot__timer timer <?php echo $time_report['hours'] === '00' ? 'timer--finishing' : ''; ?>">
                         <?php echo is_array($time_report) ? implode(':', $time_report) : 'error'; ?>
                     </div>
                     <div class="lot-item__cost-state">
@@ -35,7 +35,7 @@
                             <p class="lot-item__form-item form__item <?php echo $classname; ?>">
                                 <label for="cost">Ваша ставка</label>
                                 <input id="cost" type="text" name="cost"
-                                       placeholder="<?php echo $lot['starting_price'] + $lot['bid_step']; ?>">
+                                       placeholder="<?php echo $lot['price'] + $lot['bid_step']; ?>">
                                 <span class="form__error"><?php echo $errors['cost'] ?? ''; ?></span>
                             </p>
                             <button type="submit" class="button">Сделать ставку</button>

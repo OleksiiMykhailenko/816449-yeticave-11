@@ -6,6 +6,7 @@ require_once('init.php');
 require_once('data.php');
 
 $categories = get_all_categories($link);
+$rates = [];
 $result = get_user_bets($link, $user_id);
 
 if ($result) {
@@ -15,16 +16,15 @@ if ($result) {
         $rates = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
         foreach ($rates as $key => $rate) {
-            if (isset($rate['date_of_completion'])) {
-                $date_of_completion = get_dt_range($rate['date_of_completion']);
-            }
+
+            $date_of_completion = get_dt_range($rate['date_of_completion']);
+
             $rates[$key]['timer_class'] = '';
             $rates[$key]['timer_message'] = date_format(date_create($rate['date_of_completion']), 'd.m.Y в H:i');
 
-            if ((int)$date_of_completion[0] === 0 && !empty($date_of_completion)) {
-                $rates[$key]['timer_class'] = 'timer--finishing';
+            if (!empty($date_of_completion))  {
+                $rates[$key]['timer_class'] = 'timer-finishing';
                 $rates[$key]['timer_message'] = implode(':', $date_of_completion);
-                $rates[$key]['rate_class'] = 'rates__item';
             }
 
             if (date_create('now') > date_create($rate['date_of_completion'])) {

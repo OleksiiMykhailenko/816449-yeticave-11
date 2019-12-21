@@ -15,7 +15,7 @@
         <ul class="pagination-list">
             <li class="pagination-item pagination-item-prev"><a href="<?php echo $prev_page_link; ?>">Назад</a></li>
             <?php foreach ($pages as $page): ?>
-                <li class="pagination-item <?php if ($page == $cur_page): ?>pagination-item-active<?php endif; ?>"><a href="<?php echo $url; ?>&page=<?php echo $page; ?>"><?php echo $page; ?></a></li>
+                <li class="pagination-item <?php if ($page === $cur_page): ?>pagination-item-active<?php endif; ?>"><a href="<?php echo $url; ?>&page=<?php echo $page; ?>"><?php echo $page; ?></a></li>
             <?php endforeach; ?>
             <li class="pagination-item pagination-item-next"><a href="<?php echo $next_page_link; ?>">Вперед</a></li>
         </ul>

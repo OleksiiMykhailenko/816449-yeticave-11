@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
     $email = mysqli_real_escape_string($link, $form['email']);
     $result = get_user_by_email_login($link, $email);
-    //
+
     $user = $result ? mysqli_fetch_array($result, MYSQLI_ASSOC) : null;
 
     if (!count($errors) && $user) {

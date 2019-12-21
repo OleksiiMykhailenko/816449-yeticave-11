@@ -1,5 +1,7 @@
 <?php
 
+require_once('functions/common.php');
+
 session_start();
 
 $link = connect_to_db();

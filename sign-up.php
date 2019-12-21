@@ -6,10 +6,10 @@ require_once('init.php');
 require_once('data.php');
 
 $categories = get_all_categories($link);
+$errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $form = $_POST;
-    $errors = [];
 
     $required = ['email', 'password', 'name', 'contacts'];
 

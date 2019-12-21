@@ -20,7 +20,7 @@ if (null === $category) {
     $page_title = '404 Страница не найдена';
 } else {
     $page_title = 'Все лоты в категории ' . ($category['title'] ?? '');
-    $url = '/category.php?id' . $category_id;
+    $url = '/category.php?id=' . $category_id;
     $cur_page = (int)($_GET['page'] ?? 1);
     $page_items = 9;
     $lots_count = get_active_lots_count_by_category_id($link, $category_id);

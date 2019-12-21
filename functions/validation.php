@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Функция форматирует цену
  * @param string $sum цена
@@ -148,7 +149,7 @@ function validate_email($value)
 
 /**
  * Функция валидации шага ставки
- * @param string $value значение поля
+ * @param float $value значение поля
  * @param float $price текущая цена
  * @param float $step шаг ставки
  * @return string|null текст ошибки валидации
@@ -171,21 +172,21 @@ function validate_cost($value, $price, $step)
  * @param string $dt дата
  * @return string отформатированная дата
  */
-function format_rate_date($dt) {
+function format_rate_date($dt)
+{
     $formatted_date = date_create($dt);
     $dt_now = date_create('now');
     $dt_diff = date_diff($dt_now, $formatted_date);
     $days_count = date_interval_format($dt_diff, "%a");
     $hours_count = date_interval_format($dt_diff, "%h");
     $min_count = date_interval_format($dt_diff, "%i");
-    $last_min_word = get_noun_plural_form((int) $min_count,'минуту','минуты','минут');
-    $last_hours_word = get_noun_plural_form((int) $hours_count,'час','часа','часов');
+    $last_min_word = get_noun_plural_form((int)$min_count, 'минуту', 'минуты', 'минут');
+    $last_hours_word = get_noun_plural_form((int)$hours_count, 'час', 'часа', 'часов');
     if ($days_count === "0") {
         if ($hours_count === "0") {
-            return ($min_count > 1) ? $min_count . " $last_min_word назад": 'только что';
-        } else {
-            return  "$hours_count $last_hours_word, $min_count $last_min_word назад";
+            return ($min_count > 1) ? $min_count . " $last_min_word назад" : 'только что';
         }
+        return "$hours_count $last_hours_word, $min_count $last_min_word назад";
     }
-    return date_format($formatted_date,'d.m.Y в H:i');
+    return date_format($formatted_date, 'd.m.Y в H:i');
 }
